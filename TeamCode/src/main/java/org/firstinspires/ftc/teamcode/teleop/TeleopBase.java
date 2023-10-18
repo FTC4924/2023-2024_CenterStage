@@ -37,6 +37,14 @@ public abstract class TeleopBase extends CommandOpMode {
                 "leftBack",
                 "rightBack"
         );
+        /*
+        Create subsystems: Hanging, collection/transfer
+        Hanging: leftWinch, rightWinch, leftHook, rightHook
+        Collection/Transfer: collectionMotor, transferServo
+        hooksUp and hooksDown
+        raise and lower
+        collectIdleDeposit and spit
+         */
 
         // TODO: 6/27/2023 Construct subsystems here
 
@@ -55,7 +63,14 @@ public abstract class TeleopBase extends CommandOpMode {
         AxisTrigger gpad2RightTrigger = new AxisTrigger(this::getGpad2RightTrigger, CONTROLLER_TOLERANCE);
 
 
-        Command driveCommand = new DefaultDrive(drive, gpad1::getLeftX, gpad1::getLeftY, this::getGpad1LeftTrigger, this::getGpad1RightTrigger, gpad1.getGamepadButton(GamepadKeys.Button.Y)::get);
+        Command driveCommand = new DefaultDrive(
+                drive,
+                gpad1::getLeftX,
+                gpad1::getLeftY,
+                this::getGpad1LeftTrigger,
+                this::getGpad1RightTrigger,
+                gpad1.getGamepadButton(GamepadKeys.Button.Y)::get
+        );
         Command resetGyro = new InstantCommand(drive::resetGyro);
         // TODO: 6/27/2023 Create commands for later execution here
 
