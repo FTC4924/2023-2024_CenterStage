@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class HangingSubsystem extends SubsystemBase {
-    private final MotorEx leftWinch, rightWinch;
-    private final ServoEx leftHook, rightHook;
+    public final MotorEx leftWinch, rightWinch;
+    public final ServoEx leftHook, rightHook;
 
 
     public HangingSubsystem(HardwareMap hardwareMap, MotorEx leftWinch, MotorEx rightWinch, ServoEx leftHook, ServoEx rightHook) {
@@ -30,6 +30,26 @@ public class HangingSubsystem extends SubsystemBase {
 
         );
     }
+
+    public void raise(double power) {
+        leftWinch.set(power);
+        rightWinch.set(power);
+    }
+    public void lower(double power) {
+        leftWinch.set(power);
+        rightWinch.set(power);
+    }
+    public void hooksUp() {
+        leftHook.setPosition(1.0);  // adjust as needed
+        rightHook.setPosition(1.0);
+    }
+
+    public void hooksDown() {
+        leftHook.setPosition(0.0);  // adjust as needed
+        rightHook.setPosition(0.0);
+    }
+
+
 
 
 

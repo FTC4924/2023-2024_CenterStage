@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.commands.TelemetryCommand;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.AxisTrigger;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.JoystickTrigger;
 
@@ -18,6 +19,7 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE
 
 public abstract class TeleopBase extends CommandOpMode {
     protected DriveSubsystem drive;
+    protected HangingSubsystem hang;
     // TODO: 6/27/2023 Declare subsystems here
 
     private GamepadEx gpad1;
@@ -37,6 +39,15 @@ public abstract class TeleopBase extends CommandOpMode {
                 "leftBack",
                 "rightBack"
         );
+
+        hang = new HangingSubsystem(
+                hardwareMap,
+                "leftWinch",
+                "rightWinch",
+                "leftHook",
+                "rightHook"
+        );
+
         /*
         Create subsystems: Hanging, collection/transfer
         Hanging: leftWinch, rightWinch, leftHook, rightHook
@@ -83,9 +94,12 @@ public abstract class TeleopBase extends CommandOpMode {
 
         ///////////////////////////// Gamepad 2 keybindings /////////////////////////////
 
+        gpad2.getGamepadButton(GamepadKeys.Button.X).whenActive(() -> hang.raise(1)); //change power as needed
+        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenActive(() -> hang.lower(-1)); //change power as needed
         // TODO: 6/27/2023 Add keybindings for driver 2
 
         register(drive);  // TODO: 6/27/2023 Register subsystems here
+        register(hang);
 
         ///////////////////////////// Subsystem Default Commands /////////////////////////////
 
