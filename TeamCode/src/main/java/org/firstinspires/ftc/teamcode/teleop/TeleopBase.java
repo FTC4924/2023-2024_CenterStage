@@ -3,15 +3,15 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
-import org.firstinspires.ftc.teamcode.ftclib.commands.TelemetryCommand;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.AxisTrigger;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.JoystickTrigger;
 
@@ -19,7 +19,10 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE
 
 public abstract class TeleopBase extends CommandOpMode {
     protected DriveSubsystem drive;
-    protected HangingSubsystem hang;
+    protected HangingSubsystem hanging;
+    protected TransferSubsystem transfer;
+    protected CollectionSubsystem collection;
+
     // TODO: 6/27/2023 Declare subsystems here
 
     private GamepadEx gpad1;
@@ -40,13 +43,24 @@ public abstract class TeleopBase extends CommandOpMode {
                 "rightBack"
         );
 
-        hang = new HangingSubsystem(
+        hanging = new HangingSubsystem(
                 hardwareMap,
                 "leftWinch",
                 "rightWinch",
                 "leftHook",
                 "rightHook"
         );
+
+        transfer = new TransferSubsystem(
+                hardwareMap,
+                "transferServo"
+        );
+
+        collection = new CollectionSubsystem(
+                hardwareMap,
+                "collectionMotor"
+        );
+
 
         /*
         Create subsystems: Hanging, collection/transfer
@@ -94,12 +108,27 @@ public abstract class TeleopBase extends CommandOpMode {
 
         ///////////////////////////// Gamepad 2 keybindings /////////////////////////////
 
-        gpad2.getGamepadButton(GamepadKeys.Button.X).whenActive(() -> hang.raise(1)); //change power as needed
-        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenActive(() -> hang.lower(-1)); //change power as needed
+
+        gpad2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(hanging::hooksDown);
+        gpad2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(hanging::hooksUp);  // TODO: 10/20/2023 add hanging hooks past to dislodge the hooks
+        gpad2RightStick.y
+                .whileActiveContinuous(() -> hanging.setPower(gpad2.getRightY()))
+                .whenInactive(() -> hanging.setPower(0.0));
+        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
+            if (collection.getPower() <= 0.0) collection.intake();
+            else collection.idle();
+        });
+        gpad2.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
+            if (collection.getPower() >= 0.0) collection.output();
+            else collection.idle();
+        });
+        gpad2.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(transfer::deposit, transfer::collect);
+
         // TODO: 6/27/2023 Add keybindings for driver 2
 
-        register(drive);  // TODO: 6/27/2023 Register subsystems here
-        register(hang);
+        register(drive, hanging, transfer, collection);  // TODO: 6/27/2023 Register subsystems here
 
         ///////////////////////////// Subsystem Default Commands /////////////////////////////
 
