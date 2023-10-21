@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class HangingSubsystem extends SubsystemBase {
@@ -21,6 +22,7 @@ public class HangingSubsystem extends SubsystemBase {
 
         this.leftWinch.setRunMode(Motor.RunMode.PositionControl);
         this.rightWinch.setRunMode(Motor.RunMode.PositionControl);
+        this.leftHook.setInverted(true);
     }
 
     public HangingSubsystem(HardwareMap hMap, String leftWinch, String rightWinch, String leftHook, String rightHook) {
@@ -38,20 +40,37 @@ public class HangingSubsystem extends SubsystemBase {
     }
 
     public void hooksUp() {
-        leftHook.setPosition(1.0);  // adjust as needed
-        rightHook.setPosition(1.0);
+        leftHook.setPosition(0.5);  // adjust as needed
+        rightHook.setPosition(0.5);
     }
 
     public void hooksDown() {
-        leftHook.setPosition(0.0);  // adjust as needed
-        rightHook.setPosition(0.0);
+        leftHook.setPosition(0.06);  // adjust as needed
+        rightHook.setPosition(0.06);
     }
 
+    public void hooksPast() {
+        leftHook.setPosition(0.7);
+        rightHook.setPosition(0.7);
+    }
 
+    public void setLeftHook(double position) {
+        leftHook.setPosition(position);
+    }
 
+    public void setRightHook(double position) {
+        rightHook.setPosition(position);
+    }
 
+    public double getLeftHook() {
+        return leftHook.getPosition();
+    }
 
-   /*
+    public double getRightHook() {
+        return rightHook.getPosition();
+    }
+
+    /*
         Create subsystems: Hanging, collection/transfer
         Hanging: leftWinch, rightWinch, leftHook, rightHook
         Collection/Transfer: collectionMotor, transferServo

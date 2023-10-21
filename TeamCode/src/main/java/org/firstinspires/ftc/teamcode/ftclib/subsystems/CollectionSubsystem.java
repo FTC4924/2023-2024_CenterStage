@@ -11,6 +11,7 @@ public class CollectionSubsystem extends SubsystemBase {
     public CollectionSubsystem(MotorEx collectionMotor) {
         this.collectionMotor = collectionMotor;
         this.collectionMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        this.collectionMotor.setInverted(true);
     }
 
     public CollectionSubsystem(HardwareMap hMap, String collectionMotor) {
@@ -18,11 +19,11 @@ public class CollectionSubsystem extends SubsystemBase {
     }
 
     public void intake() {
-        collectionMotor.set(1.0);
+        collectionMotor.set(0.5);
     }
 
     public void output() {
-        collectionMotor.set(-1.0);
+        collectionMotor.set(-0.5);
     }
 
     public void idle() {

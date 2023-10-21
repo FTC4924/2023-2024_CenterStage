@@ -5,6 +5,8 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
@@ -17,7 +19,8 @@ import org.firstinspires.ftc.teamcode.ftclib.triggers.JoystickTrigger;
 
 import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE;
 
-public abstract class TeleopBase extends CommandOpMode {
+@TeleOp
+public class TeleopDebug extends CommandOpMode {
     protected DriveSubsystem drive;
     protected HangingSubsystem hanging;
     protected TransferSubsystem transfer;
@@ -100,32 +103,27 @@ public abstract class TeleopBase extends CommandOpMode {
 
 
         ///////////////////////////// Gamepad 1 keybindings /////////////////////////////
-        gpad1.getGamepadButton(GamepadKeys.Button.B)  // Reset the Gyro
+        /*gpad1.getGamepadButton(GamepadKeys.Button.B)  // Reset the Gyro
                 .whenActive(drive::resetGyro);
 
         // TODO: 6/27/2023 Add keybindings for driver 1
-
+*/
         ///////////////////////////// Gamepad 2 keybindings /////////////////////////////
 
+        gpad2LeftStick.y.whileActiveContinuous(() -> hanging.setLeftHook(hanging.getLeftHook() + gpad2.getLeftY() / 200) );
 
-        gpad2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(hanging::hooksDown);
-        gpad2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(hanging::hooksUp);  // TODO: 10/20/2023 add hanging hooks past to dislodge the hooks
-        gpad2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(hanging::hooksPast);
-        gpad2RightStick.y
-                .whileActiveContinuous(() -> hanging.setPower(gpad2.getRightY()))
-                .whenInactive(() -> hanging.setPower(0.0));
-        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
-            if (collection.getPower() <= 0.0) collection.intake();
-            else collection.idle();
-        });
-        gpad2.getGamepadButton(GamepadKeys.Button.X).whenPressed(() -> {
-            if (collection.getPower() >= 0.0) collection.output();
-            else collection.idle();
-        });
-        gpad2.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(transfer::deposit, transfer::collect);
+        gpad2RightStick.y.whileActiveContinuous(() -> hanging.setRightHook(hanging.getRightHook() + gpad2.getRightY() / 200) );
+
+        gpad2LeftTrigger.whileActiveContinuous(() -> transfer.setPosition(transfer.getPosition() - gpad2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 200) );
+
+        gpad2RightTrigger.whileActiveContinuous(() -> transfer.setPosition(transfer.getPosition() + gpad2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) / 200) );
+
+        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> transfer.setPosition(0.5));
+        gpad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> hanging.setRightHook(0.5));
+        gpad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> hanging.setLeftHook(0.5));
+
+
+
 
         // TODO: 6/27/2023 Add keybindings for driver 2
 
@@ -139,6 +137,11 @@ public abstract class TeleopBase extends CommandOpMode {
     @Override
     public void run() {
         super.run();
+
+        telemetry.addData("Left Hook", hanging.getLeftHook());
+        telemetry.addData("Left Hook Raw", hardwareMap.get(Servo.class, "leftHook").getPosition());
+        telemetry.addData("Right Hook", hanging.getRightHook());
+        telemetry.addData("Transfer", transfer.getPosition());
 
         // TODO: 6/27/2023 Add telemetries here
 
@@ -161,6 +164,8 @@ public abstract class TeleopBase extends CommandOpMode {
         return gpad2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
     }
 
-    protected abstract AllianceColor getAlliance();
+    protected AllianceColor getAlliance() {
+        return AllianceColor.BLUE;
+    }
 
 }

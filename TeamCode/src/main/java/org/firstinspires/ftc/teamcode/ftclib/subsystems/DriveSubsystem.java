@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftclib.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.drivebase.HDrive;
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,7 +12,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
 
     private final MotorEx frontLeft, frontRight, backLeft, backRight;
 
-    private final HDrive xDrive;
+    private final MecanumDrive mecanumDrive;
 
     private final RevIMU imu;
     private Orientation angles;
@@ -24,7 +24,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
         this.backLeft = backLeft;
         this.backRight = backRight;
 
-        this.xDrive = new HDrive(backRight, backLeft, frontRight, frontLeft);
+        this.mecanumDrive = new MecanumDrive(backRight, backLeft, frontRight, frontLeft);
 
         imu = new RevIMU(hardwareMap);
         imu.init();
@@ -43,12 +43,12 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
 
     public void drive(double strafeSpeed, double forwardSpeed, double turn) {
         double heading = imu.getRotation2d().getDegrees() - angleOffset;
-        xDrive.driveFieldCentric(strafeSpeed, forwardSpeed, turn, heading);
+        mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, turn);  //, heading
     }
 
     public void resetGyro() {
         angleOffset = imu.getRotation2d().getDegrees();
     }
 
-    public void stop() { xDrive.stop(); }
+    public void stop() { mecanumDrive.stop(); }
 }
