@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftclib.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.drivebase.HDrive;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -17,6 +18,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
     private final RevIMU imu;
     private Orientation angles;
     private double angleOffset;
+    private double targetAngle;
 
     public DriveSubsystem(HardwareMap hardwareMap, MotorEx frontLeft, MotorEx frontRight, MotorEx backLeft, MotorEx backRight) {
         this.frontLeft = frontLeft;
@@ -43,7 +45,10 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
 
     public void drive(double strafeSpeed, double forwardSpeed, double turn) {
         double heading = imu.getRotation2d().getDegrees() - angleOffset;
-        mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, turn);  //, heading
+        targetAngle += turn;
+
+        mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, targetAngle - heading, heading);
+
     }
 
     public void resetGyro() {
