@@ -49,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
         double heading = imu.getRotation2d().getDegrees() - angleOffset;
         targetAngle += turn;
 
-        mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, (targetAngle - heading) * ANGLE_CORRECTION, heading);
+        mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, turn, heading);  // (targetAngle - heading) * ANGLE_CORRECTION
 
     }
 
