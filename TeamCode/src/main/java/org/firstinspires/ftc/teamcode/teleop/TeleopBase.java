@@ -48,7 +48,8 @@ public abstract class TeleopBase extends CommandOpMode {
                 "leftWinch",
                 "rightWinch",
                 "leftHook",
-                "rightHook"
+                "rightHook",
+                telemetry
         );
 
         transfer = new TransferSubsystem(

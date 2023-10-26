@@ -9,12 +9,15 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class HangingSubsystem extends SubsystemBase {
     private final MotorEx leftWinch, rightWinch;
     private final ServoEx leftHook, rightHook;
+    private final Telemetry telemetry;
 
 
-    public HangingSubsystem(MotorEx leftWinch, MotorEx rightWinch, ServoEx leftHook, ServoEx rightHook) {
+    public HangingSubsystem(MotorEx leftWinch, MotorEx rightWinch, ServoEx leftHook, ServoEx rightHook, Telemetry telemetry) {
         this.leftWinch = leftWinch;
         this.rightWinch = rightWinch;
         this.leftHook = leftHook;
@@ -22,21 +25,33 @@ public class HangingSubsystem extends SubsystemBase {
 
         this.leftWinch.setRunMode(Motor.RunMode.PositionControl);
         this.rightWinch.setRunMode(Motor.RunMode.PositionControl);
+        this.leftWinch.set(1.0);
+        this.rightWinch.set(1.0);
+
         this.leftHook.setInverted(true);
+
+        this.telemetry = telemetry;
     }
 
-    public HangingSubsystem(HardwareMap hMap, String leftWinch, String rightWinch, String leftHook, String rightHook) {
+    public HangingSubsystem(HardwareMap hMap, String leftWinch, String rightWinch, String leftHook, String rightHook, Telemetry telemetry) {
         this(
                 new MotorEx(hMap, leftWinch),
                 new MotorEx(hMap, rightWinch),
                 new SimpleServo(hMap,leftHook, 0,180),
-                new SimpleServo(hMap,rightHook, 0,180)
+                new SimpleServo(hMap,rightHook, 0,180),
+                telemetry
         );
     }
 
+    @Override
+    public void periodic() {
+        telemetry.addData("Left winch pos", leftWinch.getCurrentPosition());
+        telemetry.addData("Right winch pos", rightWinch.getCurrentPosition());
+    }
+
     public void setPower(double power) {
-        leftWinch.set(power);
-        rightWinch.set(power);
+        leftWinch.setTargetPosition(leftWinch.getCurrentPosition() + (int) Math.round(power * 100));
+        rightWinch.setTargetPosition(rightWinch.getCurrentPosition() + (int) Math.round(power * 100));
     }
 
     public void hooksUp() {

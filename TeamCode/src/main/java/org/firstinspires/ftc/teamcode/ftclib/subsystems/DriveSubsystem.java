@@ -11,6 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite to use RoadRunner.
 
+    private static final double ANGLE_CORRECTION = 0.5;
+
     private final MotorEx frontLeft, frontRight, backLeft, backRight;
 
     private final MecanumDrive mecanumDrive;
@@ -47,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
         double heading = imu.getRotation2d().getDegrees() - angleOffset;
         targetAngle += turn;
 
-        mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, targetAngle - heading, heading);
+        mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, (targetAngle - heading) * ANGLE_CORRECTION, heading);
 
     }
 

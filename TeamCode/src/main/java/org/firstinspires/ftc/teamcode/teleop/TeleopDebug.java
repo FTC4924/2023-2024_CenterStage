@@ -51,7 +51,8 @@ public class TeleopDebug extends CommandOpMode {
                 "leftWinch",
                 "rightWinch",
                 "leftHook",
-                "rightHook"
+                "rightHook",
+                telemetry
         );
 
         transfer = new TransferSubsystem(
