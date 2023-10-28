@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -32,9 +31,6 @@ public abstract class TeleopBase extends CommandOpMode {
     @SuppressWarnings("FieldCanBeLocal")
     private AllianceColor alliance;
 
-    //TMP
-    private Trigger rightStickY;
-
     @Override
     public void initialize() {
         alliance = getAlliance();
@@ -52,8 +48,7 @@ public abstract class TeleopBase extends CommandOpMode {
                 "leftWinch",
                 "rightWinch",
                 "leftHook",
-                "rightHook",
-                telemetry
+                "rightHook"
         );
 
         transfer = new TransferSubsystem(
@@ -120,14 +115,8 @@ public abstract class TeleopBase extends CommandOpMode {
         gpad2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(hanging::hooksPast);
         gpad2RightStick.y
-                .whileActiveContinuous(() -> {
-                    hanging.setPower(gpad2.getRightY());
-                    telemetry.addLine("While Active R.Y");
-                })
-                .whenInactive(() -> {
-                    hanging.setPower(0.0);
-                    telemetry.addLine("When Inactive R.Y");
-                });
+                .whileActiveContinuous(() -> hanging.winch(gpad2.getRightY()))
+                .whenInactive(() ->  hanging.stopWinch());
         gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> {
             if (collection.getPower() <= 0.0) collection.intake();
             else collection.idle();
@@ -146,8 +135,6 @@ public abstract class TeleopBase extends CommandOpMode {
         ///////////////////////////// Subsystem Default Commands /////////////////////////////
 
         drive.setDefaultCommand(driveCommand);  // Handles controller input when no other driving command is running.
-
-        this.rightStickY = gpad2RightStick.y;
     }
 
     @Override
@@ -155,8 +142,6 @@ public abstract class TeleopBase extends CommandOpMode {
         super.run();
 
         // TODO: 6/27/2023 Add telemetries here
-        telemetry.addData("Right Stick Trigger Y", rightStickY.get());
-        telemetry.addData("Right Stick Raw Y", gpad2.getRightY());
 
         telemetry.update();
     }

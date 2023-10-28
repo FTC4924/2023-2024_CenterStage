@@ -4,54 +4,53 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class HangingSubsystem extends SubsystemBase {
-    private final MotorEx leftWinch, rightWinch;
+    private final DcMotorEx leftWinch, rightWinch;
     private final ServoEx leftHook, rightHook;
-    private final Telemetry telemetry;
 
 
-    public HangingSubsystem(MotorEx leftWinch, MotorEx rightWinch, ServoEx leftHook, ServoEx rightHook, Telemetry telemetry) {
+    public HangingSubsystem(DcMotorEx leftWinch, DcMotorEx rightWinch, ServoEx leftHook, ServoEx rightHook) {
         this.leftWinch = leftWinch;
         this.rightWinch = rightWinch;
         this.leftHook = leftHook;
         this.rightHook = rightHook;
 
-        this.leftWinch.setRunMode(Motor.RunMode.PositionControl);
-        this.rightWinch.setRunMode(Motor.RunMode.PositionControl);
-        this.leftWinch.set(1.0);
-        this.rightWinch.set(1.0);
+        this.leftWinch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.rightWinch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.leftWinch.setTargetPosition(0);
+        this.rightWinch.setTargetPosition(0);
+        this.leftWinch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.rightWinch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        this.leftWinch.setPower(1.0);
+        this.rightWinch.setPower(1.0);
 
         this.leftHook.setInverted(true);
-
-        this.telemetry = telemetry;
     }
 
-    public HangingSubsystem(HardwareMap hMap, String leftWinch, String rightWinch, String leftHook, String rightHook, Telemetry telemetry) {
+    public HangingSubsystem(HardwareMap hMap, String leftWinch, String rightWinch, String leftHook, String rightHook) {
         this(
-                new MotorEx(hMap, leftWinch),
-                new MotorEx(hMap, rightWinch),
+                hMap.get(DcMotorEx.class, leftWinch),
+                hMap.get(DcMotorEx.class, rightWinch),
                 new SimpleServo(hMap,leftHook, 0,180),
-                new SimpleServo(hMap,rightHook, 0,180),
-                telemetry
+                new SimpleServo(hMap,rightHook, 0,180)
         );
     }
 
-    @Override
-    public void periodic() {
-        telemetry.addData("Left winch pos", leftWinch.getCurrentPosition());
-        telemetry.addData("Right winch pos", rightWinch.getCurrentPosition());
+    public void winch(double amount) {
+        leftWinch.setTargetPosition(leftWinch.getCurrentPosition() + (int) Math.round(amount * 100));
+        rightWinch.setTargetPosition(rightWinch.getCurrentPosition() + (int) Math.round(amount * 100));
     }
 
-    public void setPower(double power) {
-        leftWinch.setTargetPosition(leftWinch.getCurrentPosition() + (int) Math.round(power * 100));
-        rightWinch.setTargetPosition(rightWinch.getCurrentPosition() + (int) Math.round(power * 100));
+    public void stopWinch() {
+        leftWinch.setTargetPosition(leftWinch.getCurrentPosition());
+        rightWinch.setTargetPosition(rightWinch.getCurrentPosition());
     }
 
     public void hooksUp() {

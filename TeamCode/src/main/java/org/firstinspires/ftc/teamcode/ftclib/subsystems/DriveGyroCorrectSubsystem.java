@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.ftclib.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PDController;
-import com.arcrobotics.ftclib.drivebase.HDrive;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -10,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite to use RoadRunner.
+public class DriveGyroCorrectSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite to use RoadRunner.
 
     private static final double ANGLE_CORRECTION = 0.5;
 
@@ -25,7 +24,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
 
     private final PDController angleController;
 
-    public DriveSubsystem(HardwareMap hardwareMap, MotorEx frontLeft, MotorEx frontRight, MotorEx backLeft, MotorEx backRight) {
+    public DriveGyroCorrectSubsystem(HardwareMap hardwareMap, MotorEx frontLeft, MotorEx frontRight, MotorEx backLeft, MotorEx backRight) {
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
         this.backLeft = backLeft;
@@ -37,10 +36,10 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
         imu.init();
         angles = null;
 
-        angleController = new PDController(1, 0);
+        angleController = new PDController(0.5, 0);
     }
 
-    public DriveSubsystem(HardwareMap hMap, String frontLeft, String frontRight, String backLeft, String backRight) {
+    public DriveGyroCorrectSubsystem(HardwareMap hMap, String frontLeft, String frontRight, String backLeft, String backRight) {
         this(
                 hMap,
                 new MotorEx(hMap, frontLeft),

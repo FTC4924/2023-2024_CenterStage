@@ -10,7 +10,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
+import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultGyroCorrectDrive;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveGyroCorrectSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
@@ -21,7 +23,7 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE
 
 @TeleOp
 public class TeleopDebug extends CommandOpMode {
-    protected DriveSubsystem drive;
+    protected DriveGyroCorrectSubsystem drive;
     protected HangingSubsystem hanging;
     protected TransferSubsystem transfer;
     protected CollectionSubsystem collection;
@@ -38,7 +40,7 @@ public class TeleopDebug extends CommandOpMode {
     public void initialize() {
         alliance = getAlliance();
 
-        drive = new DriveSubsystem(
+        drive = new DriveGyroCorrectSubsystem(
                 hardwareMap,
                 "leftFront",
                 "rightFront",
@@ -51,8 +53,7 @@ public class TeleopDebug extends CommandOpMode {
                 "leftWinch",
                 "rightWinch",
                 "leftHook",
-                "rightHook",
-                telemetry
+                "rightHook"
         );
 
         transfer = new TransferSubsystem(
@@ -92,7 +93,7 @@ public class TeleopDebug extends CommandOpMode {
         AxisTrigger gpad2RightTrigger = new AxisTrigger(this::getGpad2RightTrigger, CONTROLLER_TOLERANCE);
 
 
-        Command driveCommand = new DefaultDrive(
+        Command driveCommand = new DefaultGyroCorrectDrive(
                 drive,
                 gpad1::getLeftX,
                 gpad1::getLeftY,
@@ -104,11 +105,11 @@ public class TeleopDebug extends CommandOpMode {
 
 
         ///////////////////////////// Gamepad 1 keybindings /////////////////////////////
-        /*gpad1.getGamepadButton(GamepadKeys.Button.B)  // Reset the Gyro
+        gpad1.getGamepadButton(GamepadKeys.Button.B)  // Reset the Gyro
                 .whenActive(drive::resetGyro);
 
         // TODO: 6/27/2023 Add keybindings for driver 1
-*/
+
         ///////////////////////////// Gamepad 2 keybindings /////////////////////////////
 
         gpad2LeftStick.y.whileActiveContinuous(() -> hanging.setLeftHook(hanging.getLeftHook() + gpad2.getLeftY() / 200) );
