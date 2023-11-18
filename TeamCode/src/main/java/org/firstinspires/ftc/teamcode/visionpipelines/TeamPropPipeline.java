@@ -18,6 +18,8 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
     private final AllianceColor allianceColor;
     private Telemetry telemetry;
+    private final int resolutionHeight;
+    private final int resolutionWidth;
 
     @NotNull
     private volatile StrikePos strikePos = StrikePos.LEFT;
@@ -29,9 +31,13 @@ public class TeamPropPipeline extends OpenCvPipeline {
     private final static Scalar GREEN = new Scalar(0,1,0);
     private final static Scalar YELLOW = new Scalar(1,1,0);
 
-    public TeamPropPipeline(AllianceColor allianceColor, Telemetry telemetry) {
+    Mat output;
+
+    public TeamPropPipeline(AllianceColor allianceColor, Telemetry telemetry, int resolutionHeight, int resolutionWidth) {
         this.allianceColor = allianceColor;
         this.telemetry = telemetry;
+        this.resolutionHeight = resolutionHeight;
+        this.resolutionWidth = resolutionWidth;
     }
 
     private void maxAverage() {
@@ -58,31 +64,29 @@ public class TeamPropPipeline extends OpenCvPipeline {
         rightMean = (int) Core.mean(input.submat(RIGHT_REGION)).val[allianceColor.colorChannel];
 
         maxAverage();
+        //Core.multiply(YCrCb, maskedChannels, output);
+        //Core.extractChannel(input, output, allianceColor.colorChannel);
+        output = input;
 
-        Mat outputFrame = new Mat();
-        //Core.multiply(YCrCb, maskedChannels, outputFrame);
-        Core.extractChannel(input, outputFrame, allianceColor.colorChannel);
-        outputFrame = input;
-
-        //Imgproc.cvtColor(outputFrame, outputFrame, Imgproc.COLOR_YCrCb2RGB);
+        //Imgproc.cvtColor(output, output, Imgproc.COLOR_YCrCb2RGB);
 
         switch (strikePos) {
             case LEFT:
-                Imgproc.rectangle(outputFrame, LEFT_REGION, GREEN, 2);
-                Imgproc.rectangle(outputFrame, CENTER_REGION, YELLOW, 2);
-                Imgproc.rectangle(outputFrame, RIGHT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, LEFT_REGION, GREEN, 2);
+                Imgproc.rectangle(output, CENTER_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, RIGHT_REGION, YELLOW, 2);
                 break;
 
             case CENTER:
-                Imgproc.rectangle(outputFrame, LEFT_REGION, YELLOW, 2);
-                Imgproc.rectangle(outputFrame, CENTER_REGION, GREEN, 2);
-                Imgproc.rectangle(outputFrame, RIGHT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, LEFT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, CENTER_REGION, GREEN, 2);
+                Imgproc.rectangle(output, RIGHT_REGION, YELLOW, 2);
                 break;
 
             case RIGHT:
-                Imgproc.rectangle(outputFrame, LEFT_REGION, YELLOW, 2);
-                Imgproc.rectangle(outputFrame, CENTER_REGION, YELLOW, 2);
-                Imgproc.rectangle(outputFrame, RIGHT_REGION, GREEN, 2);
+                Imgproc.rectangle(output, LEFT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, CENTER_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, RIGHT_REGION, GREEN, 2);
                 break;
         }
 
@@ -91,7 +95,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
         telemetry.addData("w", LEFT_REGION.width);
         telemetry.addData("h", LEFT_REGION.height);
 
-        return outputFrame;
+        return output;
     }
 
     public StrikePos getStrikePos()
@@ -100,6 +104,13 @@ public class TeamPropPipeline extends OpenCvPipeline {
     }
 
     public void setboxes(double x1, double y1, double x2, double y2) {
+        x1 = x1 < 0 ? 0 : x1;
+        x2 = x2 > resolutionWidth ? resolutionWidth : x2;
+        y1 = y1 < 0 ? 0 :y1;
+        y2 = y2 > resolutionHeight ? resolutionHeight : y2;
+
         LEFT_REGION = new Rect((int) (LEFT_REGION.x + x1), (int) (LEFT_REGION.y + y1), (int) (LEFT_REGION.width + x2), (int) (LEFT_REGION.height + y2));
+
+
     }
 }

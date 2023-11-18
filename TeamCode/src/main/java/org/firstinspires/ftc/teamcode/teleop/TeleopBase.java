@@ -107,7 +107,6 @@ public abstract class TeleopBase extends CommandOpMode {
 
         ///////////////////////////// Gamepad 2 keybindings /////////////////////////////
 
-
         gpad2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(hanging::hooksDown);
         gpad2.getGamepadButton(GamepadKeys.Button.DPAD_UP)

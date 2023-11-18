@@ -13,18 +13,21 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import java.util.ArrayList;
+
 public class TeamPropSubsystem extends SubsystemBase {
     public static final int RESOLUTION_WIDTH = 1280;
     public static final int RESOLUTION_HEIGHT = 720;
 
     private final OpenCvWebcam webcam;
     private final TeamPropPipeline cameraPipeline;
+    private ArrayList<StrikePos> samples;
 
     public TeamPropSubsystem(HardwareMap hardwareMap, Telemetry telemetry, AllianceColor allianceColor) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        cameraPipeline = new TeamPropPipeline(allianceColor, telemetry);
+        cameraPipeline = new TeamPropPipeline(allianceColor, telemetry, RESOLUTION_HEIGHT, RESOLUTION_WIDTH);
 
         final boolean[] webcamInit = {false};
 
@@ -45,12 +48,54 @@ public class TeamPropSubsystem extends SubsystemBase {
             }
         });
 
+        samples = new ArrayList<>();
+
         //noinspection LoopConditionNotUpdatedInsideLoop,StatementWithEmptyBody
         while (!webcamInit[0]);
     }
 
     public StrikePos getStrikePos() {
         return cameraPipeline.getStrikePos();
+    }
+
+    public void clearPos() {
+        samples.clear();
+    }
+
+    public void samplePos() {
+        samples.add(getStrikePos());
+    }
+
+    public int sampleCount() {
+        return samples.size();
+    }
+
+    public StrikePos getAveragePos() {
+        int leftCount = 0;
+        int centerCount = 0;
+        int rightCount = 0;
+
+        for (StrikePos sample : samples) {
+            if (sample == StrikePos.LEFT) {
+                leftCount++;
+            } else if (sample == StrikePos.CENTER) {
+                centerCount++;
+            } else if (sample == StrikePos.RIGHT) {
+                rightCount++;
+            }
+        }
+
+        int max = leftCount;
+        StrikePos strikePos = StrikePos.LEFT;
+        if (centerCount > max) {
+            max = centerCount;
+            strikePos = StrikePos.CENTER;
+        }
+        if (rightCount > max) {
+            strikePos = StrikePos.RIGHT;
+        }
+
+        return strikePos;
     }
 
     public void editBoxes(double x1, double y1, double x2, double y2) {
