@@ -25,9 +25,7 @@ public class TransferSubsystem extends SubsystemBase {
         transferServo.setPosition(0.600);
     }
 
-    public void transport() {
-        transferServo.setPosition(0.425);
-    }
+    public void transport() {transferServo.setPosition(0.360);}
 
     public void setPosition(double position) {
         transferServo.setPosition(position);

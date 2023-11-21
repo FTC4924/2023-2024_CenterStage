@@ -59,8 +59,8 @@ public class HangingSubsystem extends SubsystemBase {
     }
 
     public void hooksDown() {
-        leftHook.setPosition(0.06);  // adjust as needed
-        rightHook.setPosition(0.06);
+        leftHook.setPosition(0.32);  // adjust as needed
+        rightHook.setPosition(0.32);
     }
 
     public void hooksPast() {

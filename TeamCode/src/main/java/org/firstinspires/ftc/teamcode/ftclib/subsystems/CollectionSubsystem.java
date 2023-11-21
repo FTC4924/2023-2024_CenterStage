@@ -19,7 +19,7 @@ public class CollectionSubsystem extends SubsystemBase {
     }
 
     public void intake() {
-        collectionMotor.set(0.75);
+        collectionMotor.set(0.85);
     }
 
     public void output() {
