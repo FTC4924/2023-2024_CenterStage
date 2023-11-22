@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ftclib.subsystems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -21,7 +22,7 @@ public class TeamPropSubsystem extends SubsystemBase {
 
     private final OpenCvWebcam webcam;
     private final TeamPropPipeline cameraPipeline;
-    private ArrayList<StrikePos> samples;
+    private final ArrayList<StrikePos> samples;
 
     public TeamPropSubsystem(HardwareMap hardwareMap, Telemetry telemetry, AllianceColor allianceColor) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -29,29 +30,23 @@ public class TeamPropSubsystem extends SubsystemBase {
 
         cameraPipeline = new TeamPropPipeline(allianceColor, telemetry, RESOLUTION_HEIGHT, RESOLUTION_WIDTH);
 
-        final boolean[] webcamInit = {false};
-
         webcam.setPipeline(cameraPipeline);
         webcam.setMillisecondsPermissionTimeout(2500);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
                 webcam.startStreaming(RESOLUTION_WIDTH, RESOLUTION_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+                FtcDashboard.getInstance().startCameraStream(webcam, 0);  // TODO STOPSHIP: 11/21/2023 Competition Illegal
                 telemetry.addData("Webcam", "Setup Finished");
-                webcamInit[0] = true;
             }
 
             public void onError(int errorCode) {
                 telemetry.speak("The web cam wasn't initialised correctly! Error code: " + errorCode);
                 telemetry.addData("Webcam", "Setup Failed! Error code: " + errorCode);
-                webcamInit[0] = true;
             }
         });
 
         samples = new ArrayList<>();
-
-        //noinspection LoopConditionNotUpdatedInsideLoop,StatementWithEmptyBody
-        while (!webcamInit[0]);
     }
 
     public StrikePos getStrikePos() {

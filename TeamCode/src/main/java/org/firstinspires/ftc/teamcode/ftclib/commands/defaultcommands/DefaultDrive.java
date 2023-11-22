@@ -39,7 +39,7 @@ public class DefaultDrive extends CommandBase {
         drive.drive(
                 xVal * reduction,
                 yVal * reduction,
-                (leftVal - rightVal) / 3
+                (leftVal - rightVal) / (turbo.getAsBoolean() ? 1 : 3)
         );
     }
 

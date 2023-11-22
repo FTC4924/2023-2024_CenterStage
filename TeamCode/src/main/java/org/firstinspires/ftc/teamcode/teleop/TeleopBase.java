@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDri
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.AxisTrigger;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.JoystickTrigger;
@@ -22,6 +23,7 @@ public abstract class TeleopBase extends CommandOpMode {
     protected HangingSubsystem hanging;
     protected TransferSubsystem transfer;
     protected CollectionSubsystem collection;
+    protected TeamPropSubsystem teamProp;
 
     // TODO: 6/27/2023 Declare subsystems here
 
@@ -60,6 +62,8 @@ public abstract class TeleopBase extends CommandOpMode {
                 hardwareMap,
                 "collectionMotor"
         );
+
+        teamProp = new TeamPropSubsystem(hardwareMap, telemetry, alliance);
 
 
         /*

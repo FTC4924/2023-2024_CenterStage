@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.autonomous.BlueAuto;
+package org.firstinspires.ftc.teamcode.autonomous.complexblueauto;
 
-public class NorthBlueAuto extends BlueAuto {
+public class NorthComplexBlueAuto extends ComplexBlueAuto {
     @Override
     protected StartPos getStartPos() {
         return StartPos.NORTH;

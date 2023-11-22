@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.BlueAuto;
+package org.firstinspires.ftc.teamcode.autonomous.complexblueauto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 
 import java.util.HashMap;
 
-@Autonomous
-public abstract class BlueAuto extends AutoBase {
+//@Autonomous
+public abstract class ComplexBlueAuto extends AutoBase {
     protected enum StartPos {
         NORTH(new Pose2d(), new Vector2d()),
         SOUTH(new Pose2d(), new Vector2d());
