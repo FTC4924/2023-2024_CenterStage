@@ -2,3 +2,4 @@
 - Odometry
 - Domain model diagram
 - runtime/compile time creation of classes with red vs blue alliances
+- Investigate RoadRunner Android Studio plugin or official roadrunner GUI (https://acme-robotics.gitbook.io/road-runner/)

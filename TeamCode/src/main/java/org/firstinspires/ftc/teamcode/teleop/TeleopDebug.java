@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -9,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
+import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultGyroCorrectDrive;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
@@ -138,16 +138,10 @@ public class TeleopDebug extends CommandOpMode {
 
     @Override
     public void run() {
-        super.run();
-
         telemetry.addData("Left Hook", hanging.getLeftHook());
         telemetry.addData("Left Hook Raw", hardwareMap.get(Servo.class, "leftHook").getPosition());
         telemetry.addData("Right Hook", hanging.getRightHook());
         telemetry.addData("Transfer", transfer.getPosition());
-
-        // TODO: 6/27/2023 Add telemetries here
-
-        telemetry.update();
     }
 
     private double getGpad1LeftTrigger() {

@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
+import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
@@ -98,7 +98,8 @@ public abstract class TeleopBase extends CommandOpMode {
                 gpad1::getLeftY,
                 this::getGpad1LeftTrigger,
                 this::getGpad1RightTrigger,
-                gpad1.getGamepadButton(GamepadKeys.Button.Y)::get
+                gpad1.getGamepadButton(GamepadKeys.Button.Y)::get,
+                gpad1.getGamepadButton(GamepadKeys.Button.X)::get
         );
         // TODO: 6/27/2023 Create commands for later execution here
 
@@ -141,12 +142,14 @@ public abstract class TeleopBase extends CommandOpMode {
     }
 
     @Override
+    public void started() {
+        transfer.transport();
+        hanging.hooksPast();
+    }
+
+    @Override
     public void run() {
-        super.run();
-
         // TODO: 6/27/2023 Add telemetries here
-
-        telemetry.update();
     }
 
     private double getGpad1LeftTrigger() {

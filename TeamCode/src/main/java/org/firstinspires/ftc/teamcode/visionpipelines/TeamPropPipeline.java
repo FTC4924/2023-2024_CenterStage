@@ -24,9 +24,9 @@ public class TeamPropPipeline extends OpenCvPipeline {
     @NotNull
     private volatile StrikePos strikePos = StrikePos.LEFT;
 
-    private Rect LEFT_REGION = new Rect();
-    private Rect CENTER_REGION = new Rect();
-    private Rect RIGHT_REGION = new Rect();
+    private Rect LEFT_REGION = new Rect(90, 357, 206, 110);
+    private Rect CENTER_REGION = new Rect(543, 355, 177, 91);
+    private Rect RIGHT_REGION = new Rect(970, 367, 210, 106);
 
     private final static Scalar GREEN = new Scalar(0,1,0);
     private final static Scalar YELLOW = new Scalar(1,1,0);
@@ -101,16 +101,5 @@ public class TeamPropPipeline extends OpenCvPipeline {
     public StrikePos getStrikePos()
     {
         return strikePos;
-    }
-
-    public void setboxes(double x1, double y1, double x2, double y2) {
-        x1 = x1 < 0 ? 0 : x1;
-        x2 = x2 > resolutionWidth ? resolutionWidth : x2;
-        y1 = y1 < 0 ? 0 :y1;
-        y2 = y2 > resolutionHeight ? resolutionHeight : y2;
-
-        LEFT_REGION = new Rect((int) (LEFT_REGION.x + x1), (int) (LEFT_REGION.y + y1), (int) (LEFT_REGION.width + x2), (int) (LEFT_REGION.height + y2));
-
-
     }
 }

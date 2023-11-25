@@ -92,8 +92,4 @@ public class TeamPropSubsystem extends SubsystemBase {
 
         return strikePos;
     }
-
-    public void editBoxes(double x1, double y1, double x2, double y2) {
-        cameraPipeline.setboxes(x1, y1, x2, y2);
-    }
 }

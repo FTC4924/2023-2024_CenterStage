@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
+import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
