@@ -36,9 +36,9 @@ public class Drive extends CommandBase {
     @Override
     public void initialize() {
         drive.drive(
+                strafe,
                 forward,
-                rotation,
-                strafe
+                rotation
         );
         timer.start();
     }

@@ -27,6 +27,8 @@ public abstract class AutoBase extends CommandOpMode {
 
     @Override
     public void initialize() {
+        telemetry.addLine("Starting init...");
+
         allianceColor = getAllianceColor();
 
         drive = new DriveSubsystem(
@@ -62,7 +64,8 @@ public abstract class AutoBase extends CommandOpMode {
 
         schedule(new InstantCommand().andThen(getCommands()));  // Schedules commmands with the command scheduler.
 
-        register(drive, roadRunner);  // TODO: 6/27/2023 Register subsystems with the command scheduler here
+        register(drive/*, roadRunner*/);  // TODO: 6/27/2023 Register subsystems with the command scheduler here
+        telemetry.update();
     }
 
     public void setRoadRunnerStart(Pose2d pose2d) {
