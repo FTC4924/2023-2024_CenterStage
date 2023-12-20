@@ -16,50 +16,18 @@ import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 import java.util.Collection;
 
 public abstract class AutoBase extends CommandOpMode {
-    protected DriveSubsystem drive;
     protected RoadRunnerSubsystem roadRunner;
-    protected HangingSubsystem hanging;
-    protected TransferSubsystem transfer;
-    protected CollectionSubsystem collection;
+
     protected TeamPropSubsystem teamProp;
-    protected AllianceColor allianceColor;
     // TODO: 6/27/2023 Declare subsystems here
 
     @Override
     public void initialize() {
         telemetry.addLine("Starting init...");
 
-        allianceColor = getAllianceColor();
+        roadRunner = new RoadRunnerSubsystem(hardwareMap);
 
-        drive = new DriveSubsystem(
-                hardwareMap,
-                "leftFront",
-                "rightFront",
-                "leftBack",
-                "rightBack"
-        );
-
-        //roadRunner = new RoadRunnerSubsystem(hardwareMap);
-
-        hanging = new HangingSubsystem(
-                hardwareMap,
-                "leftWinch",
-                "rightWinch",
-                "leftHook",
-                "rightHook"
-        );
-
-        transfer = new TransferSubsystem(
-                hardwareMap,
-                "transferServo"
-        );
-
-        collection = new CollectionSubsystem(
-                hardwareMap,
-                "collectionMotor"
-        );
-
-        teamProp = new TeamPropSubsystem(hardwareMap, telemetry, allianceColor);
+        teamProp = new TeamPropSubsystem(hardwareMap, telemetry, alliance);
         // TODO: 6/27/2023 Construct subsystems here
 
         schedule(new InstantCommand().andThen(getCommands()));  // Schedules commmands with the command scheduler.
@@ -71,8 +39,6 @@ public abstract class AutoBase extends CommandOpMode {
     public void setRoadRunnerStart(Pose2d pose2d) {
         roadRunner.setPoseEstimate(pose2d);
     }
-
-    protected abstract AllianceColor getAllianceColor();
 
     protected abstract Command getCommands();
 }

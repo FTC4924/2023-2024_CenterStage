@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import lombok.Setter;
+
 public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite to use RoadRunner.
 
     private static final double ANGLE_CORRECTION = 0.5;
@@ -22,6 +24,10 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
     private Orientation angles;
     private double angleOffset;
     private double targetAngle;
+
+    private boolean moveTurbo;
+
+    private boolean turnTurbo;
 
     private final PDController angleController;
 
@@ -51,10 +57,18 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
     }
 
     public void drive(double strafeSpeed, double forwardSpeed, double turn) {
-        double heading = imu.getRotation2d().getDegrees() - angleOffset;
-        targetAngle = heading + turn;
+        double moveReduction = moveTurbo ? 1.0 : 0.5;
+        double turnReduction = turnTurbo ? 1.0 : 0.33;
 
-        mecanumDrive.driveFieldCentric(strafeSpeed, forwardSpeed, turn, heading);  // (targetAngle - heading) * ANGLE_CORRECTION
+        double heading = imu.getRotation2d().getDegrees() - angleOffset;
+        targetAngle = heading + turn * turnReduction;
+
+        mecanumDrive.driveFieldCentric(
+                strafeSpeed * moveReduction,
+                forwardSpeed * moveReduction,
+                turn * turnReduction,
+                heading
+        );  // (targetAngle - heading) * ANGLE_CORRECTION
 
         //return;
 
@@ -66,4 +80,20 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
     }
 
     public void stop() { mecanumDrive.stop(); }
+
+    public boolean isMoveTurbo() {
+        return moveTurbo;
+    }
+
+    public boolean isTurnTurbo() {
+        return turnTurbo;
+    }
+
+    public void setMoveTurbo(boolean moveTurbo) {
+        this.moveTurbo = moveTurbo;
+    }
+
+    public void setTurnTurbo(boolean turnTurbo) {
+        this.turnTurbo = turnTurbo;
+    }
 }

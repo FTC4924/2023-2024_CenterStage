@@ -15,17 +15,12 @@ public class DefaultDrive extends CommandBase {
     private final DoubleSupplier y;
     private final DoubleSupplier left;
     private final DoubleSupplier right;
-    private final BooleanSupplier moveTurbo;
-    private final BooleanSupplier turnTurbo;
-
-    public DefaultDrive(DriveSubsystem drive, DoubleSupplier x, DoubleSupplier y, DoubleSupplier left, DoubleSupplier right, BooleanSupplier moveTurbo, BooleanSupplier turnTurbo) {
+    public DefaultDrive(DriveSubsystem drive, DoubleSupplier x, DoubleSupplier y, DoubleSupplier left, DoubleSupplier right) {
         this.drive = drive;
         this.x = x;
         this.y = y;
         this.left = left;
         this.right = right;
-        this.moveTurbo = moveTurbo;
-        this.turnTurbo = turnTurbo;
 
         addRequirements(drive);
     }
@@ -36,12 +31,11 @@ public class DefaultDrive extends CommandBase {
         double yVal = (Math.abs(y.getAsDouble()) >= CONTROLLER_TOLERANCE ? y.getAsDouble() : 0);
         double leftVal = (Math.abs(left.getAsDouble()) >= CONTROLLER_TOLERANCE ? left.getAsDouble() : 0);
         double rightVal = (Math.abs(right.getAsDouble()) >= CONTROLLER_TOLERANCE ? right.getAsDouble() : 0);
-        double reduction = (moveTurbo.getAsBoolean() ? 1.0 : 0.5);
 
         drive.drive(
-                xVal * reduction,
-                yVal * reduction,
-                (leftVal - rightVal) / (turnTurbo.getAsBoolean() ? 1 : 3)
+                xVal,
+                yVal,
+                leftVal - rightVal
         );
     }
 
