@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.ServoEx;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.RobotConstants;
@@ -23,6 +24,8 @@ public abstract class TeleopBase extends CommandOpMode {
 
     private GamepadEx gpad1;
     private GamepadEx gpad2;
+
+    private ServoEx airplaneServo;
 
     @Override
     public void initialize() {
@@ -54,6 +57,10 @@ public abstract class TeleopBase extends CommandOpMode {
         gpad1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> drive.setTurnTurbo(true))
                 .whenReleased(() -> drive.setTurnTurbo(false));
+        gpad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).and(gpad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))
+                        .whenActive(() -> airplaneServo.setPosition(1))
+                        .whenInactive(() -> airplaneServo.setPosition(0));
+
 
         // TODO: 6/27/2023 Add keybindings for driver 1
 
