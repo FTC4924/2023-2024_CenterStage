@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class CollectionSubsystem extends SubsystemBase {
     public enum CollectionState {
-        INTAKE(0.0), OUPUT(-0.75), IDLE(0.85);
+        INTAKE(0.0), OUTPUT(-0.75), IDLE(0.85);
 
         final double power;
 
@@ -35,7 +35,7 @@ public class CollectionSubsystem extends SubsystemBase {
     }
 
     public void output() {
-        setState(CollectionState.OUPUT);
+        setState(CollectionState.OUTPUT);
     }
 
     public void idle() {
