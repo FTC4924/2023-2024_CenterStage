@@ -32,7 +32,7 @@ public abstract class SimpleAutoProgram extends AutoBase {
         return new SequentialCommandGroup(
                 new Drive(drive, dr1pow, 0, 0, (startPos == StartPos.NORTH ? dr1Ntime : dr1Stime)),
                 new WaitCommand(1000),
-                new Drive(drive, 0, dr2pow * getAllianceColor().negation, 0, (startPos == StartPos.NORTH ? dr2Ntime : dr2Stime)),
+                new Drive(drive, 0, dr2pow * getAlliance().negation, 0, (startPos == StartPos.NORTH ? dr2Ntime : dr2Stime)),
                 new InstantCommand(transfer::deposit).alongWith(new WaitCommand(4000)),
                 new InstantCommand(transfer::collect).alongWith(new WaitCommand(4000))
         );

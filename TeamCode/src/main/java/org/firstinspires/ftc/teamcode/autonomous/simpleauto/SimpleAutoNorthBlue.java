@@ -12,7 +12,7 @@ public class SimpleAutoNorthBlue extends SimpleAutoProgram {
     }
 
     @Override
-    protected AllianceColor getAllianceColor() {
+    protected AllianceColor getAlliance() {
         return AllianceColor.BLUE;
     }
 }

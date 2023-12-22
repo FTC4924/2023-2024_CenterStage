@@ -6,9 +6,8 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class HangingSubsystem extends SubsystemBase {
     private final DcMotorEx leftWinch, rightWinch;
@@ -27,6 +26,7 @@ public class HangingSubsystem extends SubsystemBase {
         this.rightWinch.setTargetPosition(0);
         this.leftWinch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.rightWinch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.leftWinch.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.leftWinch.setPower(1.0);
         this.rightWinch.setPower(1.0);
@@ -53,17 +53,12 @@ public class HangingSubsystem extends SubsystemBase {
         rightWinch.setTargetPosition(rightWinch.getCurrentPosition());
     }
 
-    public void hooksUp() {
-        leftHook.setPosition(0.5);  // adjust as needed
-        rightHook.setPosition(0.5);
-    }
-
     public void hooksDown() {
-        leftHook.setPosition(0.32);  // adjust as needed
-        rightHook.setPosition(0.32);
+        leftHook.setPosition(0.4);  // adjust as needed
+        rightHook.setPosition(0.4);
     }
 
-    public void hooksPast() {
+    public void hooksUp() {
         leftHook.setPosition(0.7);
         rightHook.setPosition(0.7);
     }

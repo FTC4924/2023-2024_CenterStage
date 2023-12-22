@@ -39,7 +39,7 @@ public abstract class ComplexBlueAuto extends AutoBase {
     protected abstract EndPoint getEndPoint();
 
     @Override
-    protected AllianceColor getAllianceColor() {
+    protected AllianceColor getAlliance() {
         return AllianceColor.BLUE;
     }
 
