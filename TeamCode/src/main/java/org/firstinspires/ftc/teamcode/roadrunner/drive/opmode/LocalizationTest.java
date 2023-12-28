@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.roadrunner.drive.opmode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.TwoWheelTrackingLocalizer;
+
+import java.util.Arrays;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -20,16 +22,17 @@ public class LocalizationTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
                     new Pose2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x,
-                            -gamepad1.right_stick_x
+                            -Math.abs(gamepad1.left_stick_y)*gamepad1.left_stick_y,
+                            -Math.abs(gamepad1.left_stick_x)*gamepad1.left_stick_x,
+                            -Math.abs(gamepad1.right_stick_x)*gamepad1.right_stick_x
+
                     )
             );
 
@@ -39,6 +42,11 @@ public class LocalizationTest extends LinearOpMode {
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
+
+            telemetry.addData("raw heading", drive.getExternalHeadingVelocity());
+            telemetry.addData("wheelPositions", Arrays.toString(drive.getWheelPositions().toArray()));
+            telemetry.addData("localizerWheelPos", Arrays.toString(((TwoWheelTrackingLocalizer) drive.getLocalizer()).getWheelPositions().toArray()));
+
             telemetry.update();
         }
     }
