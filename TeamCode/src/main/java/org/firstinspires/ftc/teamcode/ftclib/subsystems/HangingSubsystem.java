@@ -10,9 +10,19 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class HangingSubsystem extends SubsystemBase {
+    public enum HooksState {
+        HOOKS_UP(0.7), HOOKS_DOWN(0.7);
+
+        final double pos;
+        HooksState(double pos) {
+            this.pos = pos;
+        }
+    }
+
     private final DcMotorEx leftWinch, rightWinch;
     private final ServoEx leftHook, rightHook;
 
+    private HooksState hooksState;
 
     public HangingSubsystem(DcMotorEx leftWinch, DcMotorEx rightWinch, ServoEx leftHook, ServoEx rightHook) {
         this.leftWinch = leftWinch;
@@ -53,39 +63,38 @@ public class HangingSubsystem extends SubsystemBase {
         rightWinch.setTargetPosition(rightWinch.getCurrentPosition());
     }
 
-    public void hooksDown() {
-        leftHook.setPosition(0.4);  // adjust as needed
-        rightHook.setPosition(0.4);
-    }
-
     public void hooksUp() {
-        leftHook.setPosition(0.7);
-        rightHook.setPosition(0.7);
+        setHooksState(HooksState.HOOKS_UP);
     }
 
-    public void setLeftHook(double position) {
+    public void hooksDown() {
+        setHooksState(HooksState.HOOKS_DOWN);
+    }
+
+    public void setHooksState(HooksState hooksState) {
+        this.hooksState = hooksState;
+        leftHook.setPosition(hooksState.pos);
+        rightHook.setPosition(hooksState.pos);
+    }
+
+    public HooksState getHooksState() {
+        return hooksState;
+    }
+
+    public void setRawLeftHook(double position) {
         leftHook.setPosition(position);
     }
 
-    public void setRightHook(double position) {
+    public void setRawRightHook(double position) {
         rightHook.setPosition(position);
     }
 
-    public double getLeftHook() {
+    public double getRawLeftHook() {
         return leftHook.getPosition();
     }
 
-    public double getRightHook() {
+    public double getRawRightHook() {
         return rightHook.getPosition();
     }
-
-    /*
-        Create subsystems: Hanging, collection/transfer
-        Hanging: leftWinch, rightWinch, leftHook, rightHook
-        Collection/Transfer: collectionMotor, transferServo
-        hooksUp and hooksDown
-        raise and lower
-        collectIdleDeposit and spit
-         */
 
 }

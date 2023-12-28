@@ -6,8 +6,19 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class TransferSubsystem extends SubsystemBase {
+    public enum TransferState {
+        COLLECT(0.35), DEPOSIT(0.60), TRANSPORT(0.37);
+
+        final double pos;
+
+        TransferState(double pos) {
+            this.pos = pos;
+        }
+    }
+
     private final ServoEx transferServo;
 
+    private TransferState transferState;
 
     public TransferSubsystem(ServoEx transferServo) {
         this.transferServo = transferServo;
@@ -18,16 +29,27 @@ public class TransferSubsystem extends SubsystemBase {
     }
 
     public void collect() {
-        transferServo.setPosition(0.350);
+        setTransferState(TransferState.COLLECT);
     }
 
     public void deposit() {
-        transferServo.setPosition(0.600);
+        setTransferState(TransferState.DEPOSIT);
     }
 
-    public void transport() {transferServo.setPosition(0.360);}
+    public void transport() {
+        setTransferState(TransferState.TRANSPORT);
+    }
 
-    public void setPosition(double position) {
+    public void setTransferState(TransferState transferState) {
+        this.transferState = transferState;
+        transferServo.setPosition(transferState.pos);
+    }
+
+    public TransferState getTransferState() {
+        return transferState;
+    }
+
+    public void setRawPosition(double position) {
         transferServo.setPosition(position);
     }
 

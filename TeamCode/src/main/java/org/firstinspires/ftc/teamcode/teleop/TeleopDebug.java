@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,11 +8,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
-import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultGyroCorrectDrive;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveGyroCorrectSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.AxisTrigger;
@@ -112,17 +109,17 @@ public class TeleopDebug extends CommandOpMode {
 
         ///////////////////////////// Gamepad 2 keybindings /////////////////////////////
 
-        gpad2LeftStick.y.whileActiveContinuous(() -> hanging.setLeftHook(hanging.getLeftHook() + gpad2.getLeftY() / 200) );
+        gpad2LeftStick.y.whileActiveContinuous(() -> hanging.setRawLeftHook(hanging.getRawLeftHook() + gpad2.getLeftY() / 200) );
 
-        gpad2RightStick.y.whileActiveContinuous(() -> hanging.setRightHook(hanging.getRightHook() + gpad2.getRightY() / 200) );
+        gpad2RightStick.y.whileActiveContinuous(() -> hanging.setRawRightHook(hanging.getRawRightHook() + gpad2.getRightY() / 200) );
 
-        gpad2LeftTrigger.whileActiveContinuous(() -> transfer.setPosition(transfer.getPosition() - gpad2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 200) );
+        gpad2LeftTrigger.whileActiveContinuous(() -> transfer.setRawPosition(transfer.getPosition() - gpad2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 200) );
 
-        gpad2RightTrigger.whileActiveContinuous(() -> transfer.setPosition(transfer.getPosition() + gpad2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) / 200) );
+        gpad2RightTrigger.whileActiveContinuous(() -> transfer.setRawPosition(transfer.getPosition() + gpad2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) / 200) );
 
-        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> transfer.setPosition(0.5));
-        gpad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> hanging.setRightHook(0.5));
-        gpad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> hanging.setLeftHook(0.5));
+        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> transfer.setRawPosition(0.5));
+        gpad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> hanging.setRawRightHook(0.5));
+        gpad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> hanging.setRawLeftHook(0.5));
 
 
 
@@ -138,9 +135,9 @@ public class TeleopDebug extends CommandOpMode {
 
     @Override
     public void run() {
-        telemetry.addData("Left Hook", hanging.getLeftHook());
+        telemetry.addData("Left Hook", hanging.getRawLeftHook());
         telemetry.addData("Left Hook Raw", hardwareMap.get(Servo.class, "leftHook").getPosition());
-        telemetry.addData("Right Hook", hanging.getRightHook());
+        telemetry.addData("Right Hook", hanging.getRawRightHook());
         telemetry.addData("Transfer", transfer.getPosition());
     }
 
