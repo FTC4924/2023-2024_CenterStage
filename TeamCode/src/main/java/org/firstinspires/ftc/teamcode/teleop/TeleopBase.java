@@ -4,8 +4,6 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
@@ -20,7 +18,6 @@ public abstract class TeleopBase extends CommandOpMode {
 
     private ServoEx airplaneServo;
 
-
     @Override
     public void initialize() {
 
@@ -33,9 +30,6 @@ public abstract class TeleopBase extends CommandOpMode {
 
         AxisTrigger gpad2RightStickY = new AxisTrigger(gpad2::getRightY, CONTROLLER_TOLERANCE);
 
-
-
-
         // TODO: 6/27/2023 Create commands for later execution here
 
         Command driveCommand = new DefaultDrive(
@@ -44,11 +38,9 @@ public abstract class TeleopBase extends CommandOpMode {
                 gpad1::getLeftY,
                 () -> gpad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
                 () -> gpad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
-
         );
 
-                /////////////////////////// Gamepad 1 keybindings /////////////////////////////
-
+        ///////////////////////////// Gamepad 1 keybindings /////////////////////////////
         gpad1.getGamepadButton(GamepadKeys.Button.B)  // Reset the Gyro
                 .whenActive(drive::resetGyro);
         gpad1.getGamepadButton(GamepadKeys.Button.Y)
@@ -57,10 +49,9 @@ public abstract class TeleopBase extends CommandOpMode {
         gpad1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> drive.setTurnTurbo(true))
                 .whenReleased(() -> drive.setTurnTurbo(false));
-
         gpad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).and(gpad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))
-                .whenActive(() -> airplaneServo.setPosition(0.5))
-                .whenInactive(() -> airplaneServo.setPosition(0));
+                        .whenActive(() -> airplaneServo.setPosition(1))
+                        .whenInactive(() -> airplaneServo.setPosition(0));
 
 
         // TODO: 6/27/2023 Add keybindings for driver 1
