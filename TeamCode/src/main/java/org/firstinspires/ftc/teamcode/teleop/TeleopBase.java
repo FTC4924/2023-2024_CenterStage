@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
@@ -22,7 +23,7 @@ public abstract class TeleopBase extends CommandOpMode {
     public void initialize() {
 
         // TODO: 6/27/2023 Construct subsystems here
-        airplaneServo = hardwareMap.get(ServoEx.class, "airplaneServo");
+        airplaneServo = new SimpleServo(hardwareMap, "airplaneServo", 0, 0);
 
         // Initialize the gamepads and gamepad event triggers
         gpad1 = new GamepadEx(gamepad1);

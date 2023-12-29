@@ -10,8 +10,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class HangingSubsystem extends SubsystemBase {
+    private static final double RIGHT_HOOK_OFFSET = 0.03;
+
     public enum HooksState {
-        HOOKS_UP(0.7), HOOKS_DOWN(0.7);
+        HOOKS_UP(0.3), HOOKS_DOWN(0.0);
 
         final double pos;
         HooksState(double pos) {
@@ -74,7 +76,7 @@ public class HangingSubsystem extends SubsystemBase {
     public void setHooksState(HooksState hooksState) {
         this.hooksState = hooksState;
         leftHook.setPosition(hooksState.pos);
-        rightHook.setPosition(hooksState.pos);
+        rightHook.setPosition(hooksState.pos + RIGHT_HOOK_OFFSET);
     }
 
     public HooksState getHooksState() {
