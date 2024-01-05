@@ -228,56 +228,56 @@ public class TrajectorySequenceBuilder {
         return addPath(() -> currentTrajectoryBuilder.strafeRight(distance, velConstraint, accelConstraint));
     }
 
-    public TrajectorySequenceBuilder splineTo(Vector2d endPosition, double endHeading) {
-        return addPath(() -> currentTrajectoryBuilder.splineTo(endPosition, endHeading, currentVelConstraint, currentAccelConstraint));
+    public TrajectorySequenceBuilder splineTo(Vector2d endPosition, double endTangent) {
+        return addPath(() -> currentTrajectoryBuilder.splineTo(endPosition, endTangent, currentVelConstraint, currentAccelConstraint));
     }
 
     public TrajectorySequenceBuilder splineTo(
             Vector2d endPosition,
-            double endHeading,
+            double endTangent,
             TrajectoryVelocityConstraint velConstraint,
             TrajectoryAccelerationConstraint accelConstraint
     ) {
-        return addPath(() -> currentTrajectoryBuilder.splineTo(endPosition, endHeading, velConstraint, accelConstraint));
+        return addPath(() -> currentTrajectoryBuilder.splineTo(endPosition, endTangent, velConstraint, accelConstraint));
     }
 
-    public TrajectorySequenceBuilder splineToConstantHeading(Vector2d endPosition, double endHeading) {
-        return addPath(() -> currentTrajectoryBuilder.splineToConstantHeading(endPosition, endHeading, currentVelConstraint, currentAccelConstraint));
+    public TrajectorySequenceBuilder splineToConstantHeading(Vector2d endPosition, double endTangent) {
+        return addPath(() -> currentTrajectoryBuilder.splineToConstantHeading(endPosition, endTangent, currentVelConstraint, currentAccelConstraint));
     }
 
     public TrajectorySequenceBuilder splineToConstantHeading(
             Vector2d endPosition,
-            double endHeading,
+            double endTangent,
             TrajectoryVelocityConstraint velConstraint,
             TrajectoryAccelerationConstraint accelConstraint
     ) {
-        return addPath(() -> currentTrajectoryBuilder.splineToConstantHeading(endPosition, endHeading, velConstraint, accelConstraint));
+        return addPath(() -> currentTrajectoryBuilder.splineToConstantHeading(endPosition, endTangent, velConstraint, accelConstraint));
     }
 
-    public TrajectorySequenceBuilder splineToLinearHeading(Pose2d endPose, double endHeading) {
-        return addPath(() -> currentTrajectoryBuilder.splineToLinearHeading(endPose, endHeading, currentVelConstraint, currentAccelConstraint));
+    public TrajectorySequenceBuilder splineToLinearHeading(Pose2d endPose, double endTangent) {
+        return addPath(() -> currentTrajectoryBuilder.splineToLinearHeading(endPose, endTangent, currentVelConstraint, currentAccelConstraint));
     }
 
     public TrajectorySequenceBuilder splineToLinearHeading(
             Pose2d endPose,
-            double endHeading,
+            double endTangent,
             TrajectoryVelocityConstraint velConstraint,
             TrajectoryAccelerationConstraint accelConstraint
     ) {
-        return addPath(() -> currentTrajectoryBuilder.splineToLinearHeading(endPose, endHeading, velConstraint, accelConstraint));
+        return addPath(() -> currentTrajectoryBuilder.splineToLinearHeading(endPose, endTangent, velConstraint, accelConstraint));
     }
 
-    public TrajectorySequenceBuilder splineToSplineHeading(Pose2d endPose, double endHeading) {
-        return addPath(() -> currentTrajectoryBuilder.splineToSplineHeading(endPose, endHeading, currentVelConstraint, currentAccelConstraint));
+    public TrajectorySequenceBuilder splineToSplineHeading(Pose2d endPose, double endTangent) {
+        return addPath(() -> currentTrajectoryBuilder.splineToSplineHeading(endPose, endTangent, currentVelConstraint, currentAccelConstraint));
     }
 
     public TrajectorySequenceBuilder splineToSplineHeading(
             Pose2d endPose,
-            double endHeading,
+            double endTangent,
             TrajectoryVelocityConstraint velConstraint,
             TrajectoryAccelerationConstraint accelConstraint
     ) {
-        return addPath(() -> currentTrajectoryBuilder.splineToSplineHeading(endPose, endHeading, velConstraint, accelConstraint));
+        return addPath(() -> currentTrajectoryBuilder.splineToSplineHeading(endPose, endTangent, velConstraint, accelConstraint));
     }
 
     private TrajectorySequenceBuilder addPath(AddPathCallback callback) {

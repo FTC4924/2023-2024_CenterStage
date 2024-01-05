@@ -4,16 +4,9 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 
-import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.RoadRunnerSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
-
-import java.util.Collection;
 
 public abstract class AutoBase extends CommandOpMode {
     protected RoadRunnerSubsystem roadRunner;
@@ -32,7 +25,7 @@ public abstract class AutoBase extends CommandOpMode {
 
         schedule(new InstantCommand().andThen(getCommands()));  // Schedules commmands with the command scheduler.
 
-        register(drive/*, roadRunner*/);  // TODO: 6/27/2023 Register subsystems with the command scheduler here
+        register(roadRunner);  // TODO: 6/27/2023 Register subsystems with the command scheduler here
         telemetry.update();
     }
 

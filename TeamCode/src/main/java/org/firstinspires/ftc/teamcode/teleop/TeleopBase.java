@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -66,14 +67,13 @@ public abstract class TeleopBase extends CommandOpMode {
         gpad2RightStickY
                 .whileActiveContinuous(() -> hanging.winch(gpad2.getRightY()))
                 .whenInactive(() ->  hanging.stopWinch());
-        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(collection::intake);
-        gpad2.getGamepadButton(GamepadKeys.Button.X).whenPressed(collection::output);
-        gpad2.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(transfer::deposit, transfer::collect);
-        gpad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(transfer::transport);
+        gpad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(transfer::collect);
+        gpad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(transfer::deposit);
+        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(transfer::reverse);
 
         // TODO: 6/27/2023 Add keybindings for driver 2
 
-        register(drive, hanging, transfer, collection);  // TODO: 6/27/2023 Register subsystems here
+//        register();  // TODO: 6/27/2023 Register subsystems here
 
         ///////////////////////////// Subsystem Default Commands /////////////////////////////
 
@@ -82,12 +82,13 @@ public abstract class TeleopBase extends CommandOpMode {
 
     @Override
     public void started() {
-        transfer.transport();
-        hanging.hooksUp();
+        hanging.hooksDown();
     }
 
     @Override
     public void run() {
         // TODO: 6/27/2023 Add telemetries here
+        telemetry.addData("Transfer State", transfer.getState());
+        telemetry.addData("Motor Power", transfer.getMotorPower());
     }
 }

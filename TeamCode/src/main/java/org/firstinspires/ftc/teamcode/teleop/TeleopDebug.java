@@ -6,12 +6,15 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
+import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultGyroCorrectDrive;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveGyroCorrectSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.AxisTrigger;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.JoystickTrigger;
@@ -20,60 +23,21 @@ import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE
 
 @TeleOp
 public class TeleopDebug extends CommandOpMode {
-    protected DriveGyroCorrectSubsystem drive;
-    protected HangingSubsystem hanging;
-    protected TransferSubsystem transfer;
-    protected CollectionSubsystem collection;
-
     // TODO: 6/27/2023 Declare subsystems here
 
     private GamepadEx gpad1;
     private GamepadEx gpad2;
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private AllianceColor alliance;
+    private AprilTagSubsystem aprilTag;
+    private TeamPropSubsystem teamProp;
 
     @Override
     public void initialize() {
-        alliance = getAlliance();
-
-        drive = new DriveGyroCorrectSubsystem(
-                hardwareMap,
-                "leftFront",
-                "rightFront",
-                "leftBack",
-                "rightBack"
-        );
-
-        hanging = new HangingSubsystem(
-                hardwareMap,
-                "leftWinch",
-                "rightWinch",
-                "leftHook",
-                "rightHook"
-        );
-
-        transfer = new TransferSubsystem(
-                hardwareMap,
-                "transferServo"
-        );
-
-        collection = new CollectionSubsystem(
-                hardwareMap,
-                "collectionMotor"
-        );
-
-
-        /*
-        Create subsystems: Hanging, collection/transfer
-        Hanging: leftWinch, rightWinch, leftHook, rightHook
-        Collection/Transfer: collectionMotor, transferServo
-        hooksUp and hooksDown
-        raise and lower
-        collectIdleDeposit and spit
-         */
-
         // TODO: 6/27/2023 Construct subsystems here
+
+        aprilTag = new AprilTagSubsystem(hardwareMap, telemetry);
+        teamProp = new TeamPropSubsystem(hardwareMap, telemetry, alliance);
+
 
         // Initialize the gamepads and gamepad event triggers
         gpad1 = new GamepadEx(gamepad1);
@@ -84,19 +48,18 @@ public class TeleopDebug extends CommandOpMode {
         JoystickTrigger gpad2LeftStick = new JoystickTrigger(gpad2::getLeftX, gpad2::getLeftY);
         JoystickTrigger gpad2RightStick = new JoystickTrigger(gpad2::getRightX, gpad2::getRightY);
 
-        AxisTrigger gpad1LeftTrigger = new AxisTrigger(this::getGpad1LeftTrigger, CONTROLLER_TOLERANCE);
-        AxisTrigger gpad1RightTrigger = new AxisTrigger(this::getGpad1RightTrigger, CONTROLLER_TOLERANCE);
-        AxisTrigger gpad2LeftTrigger = new AxisTrigger(this::getGpad2LeftTrigger, CONTROLLER_TOLERANCE);
-        AxisTrigger gpad2RightTrigger = new AxisTrigger(this::getGpad2RightTrigger, CONTROLLER_TOLERANCE);
+        AxisTrigger gpad1LeftTrigger = new AxisTrigger(() -> gpad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER), CONTROLLER_TOLERANCE);
+        AxisTrigger gpad1RightTrigger = new AxisTrigger(() -> gpad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER), CONTROLLER_TOLERANCE);
+        AxisTrigger gpad2LeftTrigger = new AxisTrigger(() -> gpad2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER), CONTROLLER_TOLERANCE);
+        AxisTrigger gpad2RightTrigger = new AxisTrigger(() -> gpad2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER), CONTROLLER_TOLERANCE);
 
 
-        Command driveCommand = new DefaultGyroCorrectDrive(
+        Command driveCommand = new DefaultDrive(
                 drive,
                 gpad1::getLeftX,
                 gpad1::getLeftY,
-                this::getGpad1LeftTrigger,
-                this::getGpad1RightTrigger,
-                gpad1.getGamepadButton(GamepadKeys.Button.Y)::get
+                () -> gpad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER),
+                () -> gpad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
         );
         // TODO: 6/27/2023 Create commands for later execution here
 
@@ -113,20 +76,13 @@ public class TeleopDebug extends CommandOpMode {
 
         gpad2RightStick.y.whileActiveContinuous(() -> hanging.setRawRightHook(hanging.getRawRightHook() + gpad2.getRightY() / 200) );
 
-        gpad2LeftTrigger.whileActiveContinuous(() -> transfer.setRawPosition(transfer.getPosition() - gpad2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 200) );
-
-        gpad2RightTrigger.whileActiveContinuous(() -> transfer.setRawPosition(transfer.getPosition() + gpad2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) / 200) );
-
-        gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(() -> transfer.setRawPosition(0.5));
         gpad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(() -> hanging.setRawRightHook(0.5));
         gpad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(() -> hanging.setRawLeftHook(0.5));
 
 
-
-
         // TODO: 6/27/2023 Add keybindings for driver 2
 
-        register(drive, hanging, transfer, collection);  // TODO: 6/27/2023 Register subsystems here
+        register();  // TODO: 6/27/2023 Register subsystems here
 
         ///////////////////////////// Subsystem Default Commands /////////////////////////////
 
@@ -138,23 +94,6 @@ public class TeleopDebug extends CommandOpMode {
         telemetry.addData("Left Hook", hanging.getRawLeftHook());
         telemetry.addData("Left Hook Raw", hardwareMap.get(Servo.class, "leftHook").getPosition());
         telemetry.addData("Right Hook", hanging.getRawRightHook());
-        telemetry.addData("Transfer", transfer.getPosition());
-    }
-
-    private double getGpad1LeftTrigger() {
-        return gpad1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
-    }
-
-    private double getGpad1RightTrigger() {
-        return gpad1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
-    }
-
-    private double getGpad2LeftTrigger() {
-        return gpad2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
-    }
-
-    private double getGpad2RightTrigger() {
-        return gpad2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
     }
 
     protected AllianceColor getAlliance() {

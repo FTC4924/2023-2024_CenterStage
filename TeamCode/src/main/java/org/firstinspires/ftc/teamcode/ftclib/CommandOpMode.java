@@ -6,15 +6,12 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.Subsystem;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.AllianceColor;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.CollectionSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 
 public abstract class CommandOpMode extends OpMode {
@@ -23,7 +20,6 @@ public abstract class CommandOpMode extends OpMode {
     protected DriveSubsystem drive;
     protected HangingSubsystem hanging;
     protected TransferSubsystem transfer;
-    protected CollectionSubsystem collection;
 
     @SuppressWarnings("FieldCanBeLocal")
     protected AllianceColor alliance;
@@ -70,13 +66,12 @@ public abstract class CommandOpMode extends OpMode {
 
         transfer = new TransferSubsystem(
                 hardwareMap,
-                "transferServo"
+                "collection",
+                "transferFront",
+                "transferBack"
         );
 
-        collection = new CollectionSubsystem(
-                hardwareMap,
-                "collectionMotor"
-        );
+        register(drive, hanging, transfer);
 
         initialize();
     }
