@@ -8,12 +8,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class TransferSubsystem extends SubsystemBase {
     public enum TransferState {
-        COLLECT(0.65, 1.00, 0.00),
+        COLLECT(1.00, 1.00, 0.00),
         DEPOSIT(0.00, 1.00, 1.00),
-        REVERSE(-0.55, -1.00, -1.00),
+        REVERSE(-0.75, -1.00, -1.00),
+        COLLECT_REVERSE(-0.75, 1.00, 0.00),
         IDLE(0.00, 0, 0);
 
-        double collectionPower;
+        final double collectionPower;
         final double transferFrontPower;
         final double transferBackPower;
 
@@ -79,6 +80,8 @@ public class TransferSubsystem extends SubsystemBase {
     public void reverse() {
         setState(TransferState.REVERSE);
     }
+
+    public void collectReverse() {setState(TransferState.COLLECT_REVERSE);}
 
     public void idle() {
         setState(TransferState.IDLE);

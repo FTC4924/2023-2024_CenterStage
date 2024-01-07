@@ -18,7 +18,7 @@ public class RRDrive extends CommandBase {
 
     @Override
     public void initialize() {
-        roadRunnerSubsystem.followTrajectorySequence(trajectory);
+        roadRunnerSubsystem.followTrajectorySequenceAsync(trajectory);
     }
 
     @Override

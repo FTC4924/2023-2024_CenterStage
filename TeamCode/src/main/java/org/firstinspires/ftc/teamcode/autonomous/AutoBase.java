@@ -18,7 +18,7 @@ public abstract class AutoBase extends CommandOpMode {
     public void initialize() {
         telemetry.addLine("Starting init...");
 
-        roadRunner = new RoadRunnerSubsystem(hardwareMap);
+        roadRunner = new RoadRunnerSubsystem(hardwareMap, telemetry);
 
         teamProp = new TeamPropSubsystem(hardwareMap, telemetry, alliance);
         // TODO: 6/27/2023 Construct subsystems here

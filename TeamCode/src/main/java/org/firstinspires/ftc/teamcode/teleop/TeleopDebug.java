@@ -1,23 +1,24 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.util.Timing.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
-import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultGyroCorrectDrive;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.AprilTagSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveGyroCorrectSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.RoadRunnerSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.AxisTrigger;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.JoystickTrigger;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE;
 
@@ -28,15 +29,27 @@ public class TeleopDebug extends CommandOpMode {
     private GamepadEx gpad1;
     private GamepadEx gpad2;
 
-    private AprilTagSubsystem aprilTag;
+    //private AprilTagSubsystem aprilTag;
     private TeamPropSubsystem teamProp;
 
     @Override
     public void initialize() {
         // TODO: 6/27/2023 Construct subsystems here
 
-        aprilTag = new AprilTagSubsystem(hardwareMap, telemetry);
+        //aprilTag = new AprilTagSubsystem(hardwareMap, telemetry);
         teamProp = new TeamPropSubsystem(hardwareMap, telemetry, alliance);
+
+        RoadRunnerSubsystem roadRunner = new RoadRunnerSubsystem(hardwareMap, telemetry);
+        Timer timer = new Timer(100, TimeUnit.SECONDS);
+
+        Pose2d startPos = new Pose2d(18, 66, -90);
+        timer.start();
+        TrajectorySequenceBuilder trajectorySequenceBuilder = roadRunner.trajectorySequenceBuilder(startPos)
+                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0);
+        telemetry.addData("Trajectory Construction", timer.elapsedTime());
+        trajectorySequenceBuilder.build();
+        telemetry.addData("Trajectory Build Time", timer.elapsedTime());
 
 
         // Initialize the gamepads and gamepad event triggers

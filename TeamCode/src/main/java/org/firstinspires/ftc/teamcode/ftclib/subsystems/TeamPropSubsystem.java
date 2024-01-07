@@ -41,7 +41,6 @@ public class TeamPropSubsystem extends SubsystemBase {
             }
 
             public void onError(int errorCode) {
-                telemetry.speak("The web cam wasn't initialised correctly! Error code: " + errorCode);
                 telemetry.addData("Webcam", "Setup Failed! Error code: " + errorCode);
             }
         });
@@ -91,5 +90,9 @@ public class TeamPropSubsystem extends SubsystemBase {
         }
 
         return strikePos;
+    }
+
+    public void editBoxes(double x1, double y1, double x2, double y2) {
+        cameraPipeline.editBoxes(x1, y1, x2, y2);
     }
 }

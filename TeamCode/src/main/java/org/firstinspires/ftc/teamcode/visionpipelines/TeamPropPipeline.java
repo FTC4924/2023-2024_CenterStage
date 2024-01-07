@@ -30,7 +30,9 @@ public class TeamPropPipeline extends OpenCvPipeline {
     private final static Scalar GREEN = new Scalar(0,1,0);
     private final static Scalar YELLOW = new Scalar(1,1,0);
 
-    Mat output;
+    private Mat output;
+
+    private double x1, y1, x2, y2;
 
     public TeamPropPipeline(AllianceColor allianceColor, Telemetry telemetry, int resolutionHeight, int resolutionWidth) {
         this.allianceColor = allianceColor;
@@ -54,6 +56,10 @@ public class TeamPropPipeline extends OpenCvPipeline {
     @Override
     public void init(Mat firstFrame) {
         processFrame(firstFrame);
+        x1 = LEFT_REGION.x;
+        y1 = LEFT_REGION.y;
+        x2 = LEFT_REGION.width;
+        y2 = LEFT_REGION.height;
     }
 
     @Override
@@ -100,5 +106,14 @@ public class TeamPropPipeline extends OpenCvPipeline {
     public StrikePos getStrikePos()
     {
         return strikePos;
+    }
+
+    public void editBoxes(double x1, double y1, double x2, double y2) {
+        this.x1 = this.x1 + x1 < 0 ? 0 : this.x1 + x1;
+        this.x2 = this.x2 + x2 > resolutionWidth ? resolutionWidth : this.x2 + x2;
+        this.y1 = this.y1 + y1 < 0 ? 0 : this.y1 + y1;
+        this.y2 = this.y2 + y2 > resolutionHeight ? resolutionHeight : this.y2 + y2;
+
+        LEFT_REGION = new Rect((int) x1, (int) y1, (int) x2, (int) y2);
     }
 }

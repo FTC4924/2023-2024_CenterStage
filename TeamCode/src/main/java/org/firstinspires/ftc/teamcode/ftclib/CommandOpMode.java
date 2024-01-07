@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 
 public abstract class CommandOpMode extends OpMode {
-    public Telemetry telemetry = new MultipleTelemetry(super.telemetry, FtcDashboard.getInstance().getTelemetry());;
+    public Telemetry telemetry = new MultipleTelemetry(super.telemetry, FtcDashboard.getInstance().getTelemetry());
 
     protected DriveSubsystem drive;
     protected HangingSubsystem hanging;

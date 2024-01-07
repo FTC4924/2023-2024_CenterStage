@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -70,6 +69,7 @@ public abstract class TeleopBase extends CommandOpMode {
         gpad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(transfer::collect);
         gpad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(transfer::deposit);
         gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(transfer::reverse);
+        gpad2.getGamepadButton(GamepadKeys.Button.X).whenPressed(transfer::collectReverse);
 
         // TODO: 6/27/2023 Add keybindings for driver 2
 

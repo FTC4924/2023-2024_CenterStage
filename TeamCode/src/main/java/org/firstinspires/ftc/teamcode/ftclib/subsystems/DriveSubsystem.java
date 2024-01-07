@@ -2,15 +2,15 @@ package org.firstinspires.ftc.teamcode.ftclib.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PDController;
-import com.arcrobotics.ftclib.drivebase.HDrive;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-import lombok.Setter;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite to use RoadRunner.
 
@@ -20,7 +20,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
 
     private final MecanumDrive mecanumDrive;
 
-    private final RevIMU imu;
+    private final IMU imu;
     private Orientation angles;
     private double angleOffset;
     private double targetAngle;
@@ -39,8 +39,11 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
 
         this.mecanumDrive = new MecanumDrive(backRight, backLeft, frontRight, frontLeft);
 
-        imu = new RevIMU(hardwareMap);
-        imu.init();
+        imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+        imu.initialize(parameters);
+
         angles = null;
 
         angleController = new PDController(1, 0);
@@ -60,7 +63,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
         double moveReduction = moveTurbo ? 1.0 : 0.5;
         double turnReduction = turnTurbo ? 1.0 : 0.33;
 
-        double heading = imu.getRotation2d().getDegrees() - angleOffset;
+        double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) - angleOffset;
         targetAngle = heading + turn * turnReduction;
 
         mecanumDrive.driveFieldCentric(
@@ -76,7 +79,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
     }
 
     public void resetGyro() {
-        angleOffset = imu.getRotation2d().getDegrees();
+        angleOffset = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
     public void stop() { mecanumDrive.stop(); }

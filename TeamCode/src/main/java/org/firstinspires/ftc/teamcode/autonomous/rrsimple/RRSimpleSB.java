@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 
 @Autonomous
-public class RRSimpleSB extends RRSimpleBase {
+public class RRSimpleSB extends RRSimpleSouthBase {
     @Override
     protected Pose2d getStartPose() {
-        return new Pose2d(-40, 66, -90);
+        return new Pose2d(-40, 66, Math.toRadians(-90));
     }
 
     @Override
