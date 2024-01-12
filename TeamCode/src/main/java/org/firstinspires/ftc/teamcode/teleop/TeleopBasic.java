@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.arcrobotics.ftclib.util.Timing;
+import com.arcrobotics.ftclib.util.Timing.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,11 +9,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
 
+import java.util.concurrent.TimeUnit;
+
 @TeleOp
 public class TeleopBasic extends OpMode {
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private TeamPropSubsystem teamProp;
 
+    private Timer timer;
     private double lastTime;
     @Override
     public void init() {
@@ -21,6 +26,9 @@ public class TeleopBasic extends OpMode {
         backRight = hardwareMap.get(DcMotor.class,"backRight");*/
 
         teamProp = new TeamPropSubsystem(hardwareMap, telemetry, AllianceColor.RED);
+        teamProp.useAlt(true);
+        timer = new Timer(10000, TimeUnit.MICROSECONDS);
+        timer.start();
     }
 
     @Override
@@ -35,14 +43,18 @@ public class TeleopBasic extends OpMode {
         telemetry.addData("backLeft", backLeft.getPower());
         telemetry.addData("backRight", backRight.getPower());*/
 
+        double time = (double) timer.elapsedTime() / 1000000;
         double deltatime = time - lastTime;
-        double scalar = 10;
-        teamProp.editBoxes(
-                gamepad1.left_stick_x * deltatime * scalar,
-                gamepad1.left_stick_y * deltatime * scalar,
-                gamepad1.right_stick_x * deltatime * scalar,
-                gamepad1.right_stick_y * deltatime * scalar
-        );
+        telemetry.addData("time", time);
+        telemetry.addData("deltatime", deltatime);
+        double scalar = 25;
+//        teamProp.editBoxes(
+//                gamepad1.left_stick_x * deltatime * scalar,
+//                gamepad1.left_stick_y * deltatime * scalar,
+//                gamepad1.right_stick_x * deltatime * scalar,
+//                gamepad1.right_stick_y * deltatime * scalar
+//        );
+//        teamProp.periodic();
         lastTime = time;
     }
 

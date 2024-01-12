@@ -23,20 +23,23 @@ public class TeamPropSubsystem extends SubsystemBase {
     private final OpenCvWebcam webcam;
     private final TeamPropPipeline cameraPipeline;
     private final ArrayList<StrikePos> samples;
+    private final Telemetry telemetry;
 
     public TeamPropSubsystem(HardwareMap hardwareMap, Telemetry telemetry, AllianceColor allianceColor) {
+        this.telemetry = telemetry;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        cameraPipeline = new TeamPropPipeline(allianceColor, telemetry, RESOLUTION_HEIGHT, RESOLUTION_WIDTH);
+        cameraPipeline = new TeamPropPipeline(allianceColor, RESOLUTION_HEIGHT, RESOLUTION_WIDTH);
+
 
         webcam.setPipeline(cameraPipeline);
         webcam.setMillisecondsPermissionTimeout(2500);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(RESOLUTION_WIDTH, RESOLUTION_HEIGHT, OpenCvCameraRotation.UPRIGHT);
-                FtcDashboard.getInstance().startCameraStream(webcam, 0);  // TODO STOPSHIP: 11/21/2023 Competition Illegal
+                webcam.startStreaming(RESOLUTION_WIDTH, RESOLUTION_HEIGHT, OpenCvCameraRotation.UPSIDE_DOWN);
+                FtcDashboard.getInstance().startCameraStream(webcam, 0);
                 telemetry.addData("Webcam", "Setup Finished");
             }
 
@@ -46,6 +49,11 @@ public class TeamPropSubsystem extends SubsystemBase {
         });
 
         samples = new ArrayList<>();
+    }
+
+    @Override
+    public void periodic() {
+        cameraPipeline.telemetry(telemetry);
     }
 
     public StrikePos getStrikePos() {
@@ -92,7 +100,7 @@ public class TeamPropSubsystem extends SubsystemBase {
         return strikePos;
     }
 
-    public void editBoxes(double x1, double y1, double x2, double y2) {
-        cameraPipeline.editBoxes(x1, y1, x2, y2);
+    public void useAlt(boolean alt) {
+        cameraPipeline.useAlt(alt);
     }
 }

@@ -43,6 +43,7 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
+        imu.resetYaw();
 
         angles = null;
 
@@ -79,7 +80,11 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
     }
 
     public void resetGyro() {
-        angleOffset = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        angleOffset = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+    }
+
+    public void setAngleOffset(double offset) {
+        angleOffset = offset;
     }
 
     public void stop() { mecanumDrive.stop(); }

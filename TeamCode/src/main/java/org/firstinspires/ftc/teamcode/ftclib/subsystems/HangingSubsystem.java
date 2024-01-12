@@ -32,16 +32,19 @@ public class HangingSubsystem extends SubsystemBase {
         this.leftHook = leftHook;
         this.rightHook = rightHook;
 
-        this.leftWinch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.rightWinch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.leftWinch.setTargetPosition(0);
-        this.rightWinch.setTargetPosition(0);
-        this.leftWinch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        this.rightWinch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        this.leftWinch.setDirection(DcMotorSimple.Direction.REVERSE);
+//        this.leftWinch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        this.rightWinch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        this.leftWinch.setTargetPosition(0);
+//        this.rightWinch.setTargetPosition(0);
+//        this.leftWinch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        this.rightWinch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        this.leftWinch.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        this.leftWinch.setPower(1.0);
-        this.rightWinch.setPower(1.0);
+        this.leftWinch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.rightWinch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        this.leftWinch.setPower(0);
+        this.rightWinch.setPower(0);
 
         this.leftHook.setInverted(true);
     }
@@ -50,19 +53,29 @@ public class HangingSubsystem extends SubsystemBase {
         this(
                 hMap.get(DcMotorEx.class, leftWinch),
                 hMap.get(DcMotorEx.class, rightWinch),
-                new SimpleServo(hMap,leftHook, 0,180),
-                new SimpleServo(hMap,rightHook, 0,180)
+                new SimpleServo(hMap,leftHook, 0,0),
+                new SimpleServo(hMap,rightHook, 0,0)
         );
     }
 
-    public void winch(double amount) {
-        leftWinch.setTargetPosition(leftWinch.getCurrentPosition() + (int) Math.round(amount * 100));
-        rightWinch.setTargetPosition(rightWinch.getCurrentPosition() + (int) Math.round(amount * 100));
+    public void winchL(double amount) {
+//        leftWinch.setTargetPosition(leftWinch.getCurrentPosition() + (int) Math.round(amount * 100));
+        leftWinch.setPower(amount);
     }
 
-    public void stopWinch() {
-        leftWinch.setTargetPosition(leftWinch.getCurrentPosition());
-        rightWinch.setTargetPosition(rightWinch.getCurrentPosition());
+    public void winchR(double amount) {
+//        rightWinch.setTargetPosition(rightWinch.getCurrentPosition() + (int) Math.round(amount * 100));
+        rightWinch.setPower(amount);
+    }
+
+    public void stopL() {
+//        leftWinch.setTargetPosition(leftWinch.getCurrentPosition());
+        leftWinch.setPower(0);
+    }
+
+    public void stopR() {
+//        rightWinch.setTargetPosition(rightWinch.getCurrentPosition());
+        rightWinch.setPower(0);
     }
 
     public void hooksUp() {

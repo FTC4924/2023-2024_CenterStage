@@ -10,8 +10,8 @@ public class TransferSubsystem extends SubsystemBase {
     public enum TransferState {
         COLLECT(1.00, 1.00, 0.00),
         DEPOSIT(0.00, 1.00, 1.00),
-        REVERSE(-0.75, -1.00, -1.00),
-        COLLECT_REVERSE(-0.75, 1.00, 0.00),
+        REVERSE(-0.50, -1.00, -1.00),
+        COLLECT_REVERSE(-0.50, 1.00, 0.00),
         IDLE(0.00, 0, 0);
 
         final double collectionPower;

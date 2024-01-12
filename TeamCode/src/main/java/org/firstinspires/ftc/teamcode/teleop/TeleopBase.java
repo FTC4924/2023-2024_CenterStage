@@ -24,12 +24,16 @@ public abstract class TeleopBase extends CommandOpMode {
 
         // TODO: 6/27/2023 Construct subsystems here
         airplaneServo = new SimpleServo(hardwareMap, "airplaneServo", 0, 0);
+        airplaneServo.setInverted(true);
+
+        drive.setAngleOffset(driveOffset);
 
         // Initialize the gamepads and gamepad event triggers
         gpad1 = new GamepadEx(gamepad1);
         gpad2 = new GamepadEx(gamepad2);
 
         AxisTrigger gpad2RightStickY = new AxisTrigger(gpad2::getRightY, CONTROLLER_TOLERANCE);
+        AxisTrigger gpad2LeftStickY = new AxisTrigger(gpad2::getLeftY, CONTROLLER_TOLERANCE);
 
         // TODO: 6/27/2023 Create commands for later execution here
 
@@ -53,6 +57,10 @@ public abstract class TeleopBase extends CommandOpMode {
         gpad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).and(gpad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))
                         .whenActive(() -> airplaneServo.setPosition(1))
                         .whenInactive(() -> airplaneServo.setPosition(0));
+        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(hanging::hooksDown);
+        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(hanging::hooksUp);
 
 
         // TODO: 6/27/2023 Add keybindings for driver 1
@@ -64,8 +72,11 @@ public abstract class TeleopBase extends CommandOpMode {
         gpad2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(hanging::hooksUp);
         gpad2RightStickY
-                .whileActiveContinuous(() -> hanging.winch(gpad2.getRightY()))
-                .whenInactive(() ->  hanging.stopWinch());
+                .whileActiveContinuous(() -> hanging.winchR(gpad2.getRightY()))
+                .whenInactive(() ->  hanging.stopR());
+        gpad2LeftStickY
+                .whileActiveContinuous(() -> hanging.winchL(gpad2.getLeftY()))
+                .whenInactive(() ->  hanging.stopL());
         gpad2.getGamepadButton(GamepadKeys.Button.B).whenPressed(transfer::collect);
         gpad2.getGamepadButton(GamepadKeys.Button.A).whenPressed(transfer::deposit);
         gpad2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(transfer::reverse);

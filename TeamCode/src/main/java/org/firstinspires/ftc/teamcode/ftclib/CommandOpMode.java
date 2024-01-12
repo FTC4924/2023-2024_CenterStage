@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 public abstract class CommandOpMode extends OpMode {
     public Telemetry telemetry = new MultipleTelemetry(super.telemetry, FtcDashboard.getInstance().getTelemetry());
 
+    protected static double driveOffset;
+
     protected DriveSubsystem drive;
     protected HangingSubsystem hanging;
     protected TransferSubsystem transfer;
@@ -74,6 +76,7 @@ public abstract class CommandOpMode extends OpMode {
         register(drive, hanging, transfer);
 
         initialize();
+        driveOffset = 0;
     }
 
     @Override
