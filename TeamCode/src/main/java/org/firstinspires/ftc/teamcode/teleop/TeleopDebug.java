@@ -37,19 +37,31 @@ public class TeleopDebug extends CommandOpMode {
         // TODO: 6/27/2023 Construct subsystems here
 
         //aprilTag = new AprilTagSubsystem(hardwareMap, telemetry);
-        teamProp = new TeamPropSubsystem(hardwareMap, telemetry, alliance);
+//        teamProp = new TeamPropSubsystem(hardwareMap, telemetry, alliance);
 
         RoadRunnerSubsystem roadRunner = new RoadRunnerSubsystem(hardwareMap, telemetry);
-        Timer timer = new Timer(100, TimeUnit.SECONDS);
+        Timer timer = new Timer(100, TimeUnit.MILLISECONDS);
 
         Pose2d startPos = new Pose2d(18, 66, -90);
         timer.start();
         TrajectorySequenceBuilder trajectorySequenceBuilder = roadRunner.trajectorySequenceBuilder(startPos)
                 .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
                 .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0);
-        telemetry.addData("Trajectory Construction", timer.elapsedTime());
+        telemetry.addData("Trajectory Construction", timer.elapsedTime() / 1000000.0);
         trajectorySequenceBuilder.build();
-        telemetry.addData("Trajectory Build Time", timer.elapsedTime());
+        telemetry.addData("Trajectory Build Time", timer.elapsedTime() / 1000000.0);
 
 
         // Initialize the gamepads and gamepad event triggers

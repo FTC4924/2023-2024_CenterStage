@@ -13,12 +13,12 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import androidx.annotation.NonNull;
 
 public class TeamPropPipeline extends OpenCvPipeline {
-    private static final Rect LEFT_REGION = new Rect(90, 357, 206, 110);
-    private static final Rect CENTER_REGION = new Rect(543, 355, 177, 91);
-    private static final Rect RIGHT_REGION = new Rect(970, 367, 210, 106);
-    private static final Rect LEFT_ALT_REGION = new Rect(624, 390, 210, 106);
-    private static final Rect CENTER_ALT_REGION = new Rect(887, 420, 210, 106);
-    private static final int RIGHT_ALT_DEFAULT = 127;
+    private static final Rect LEFT_REGION = new Rect(101, 424, 206, 110);
+    private static final Rect CENTER_REGION = new Rect(546, 424, 185, 91);
+    private static final Rect RIGHT_REGION = new Rect(960, 432, 205, 113);
+    private static final Rect LEFT_ALT_REGION = new Rect(491, 428, 203, 100);
+    private static final Rect CENTER_ALT_REGION = new Rect(847, 419, 186, 91);
+    private static final int RIGHT_ALT_DEFAULT = 138;
 
     private static final Scalar GREEN = new Scalar(0, 255, 0);
     private static final Scalar YELLOW = new Scalar(255, 255, 0);
