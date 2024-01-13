@@ -29,6 +29,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
     private final int resolutionWidth;
     private final Mat YCrCb;
     private final Mat Cb;
+    private final Mat output;
 
     private int leftMean;
     private int centerMean;
@@ -47,6 +48,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
         YCrCb = new Mat();
         Cb = new Mat();
+        output = new Mat();
         strikePos = StrikePos.LEFT;
     }
 
@@ -84,46 +86,54 @@ public class TeamPropPipeline extends OpenCvPipeline {
         }
 
 
+        Scalar maskedChannels = new Scalar(
+                allianceColor.colorChannel == 0 ? 1 : 0,
+                allianceColor.colorChannel == 1 ? 1 : 0,
+                allianceColor.colorChannel == 2 ? 1 : 0
+        );
+        Core.multiply(YCrCb, maskedChannels, output);
+
+        Imgproc.cvtColor(output, output, Imgproc.COLOR_YCrCb2RGB);
         if (!alt) switch (strikePos) {
             case LEFT:
-                Imgproc.rectangle(input, LEFT_REGION, GREEN, 2);
-                Imgproc.rectangle(input, CENTER_REGION, YELLOW, 2);
-                Imgproc.rectangle(input, RIGHT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, LEFT_REGION, GREEN, 2);
+                Imgproc.rectangle(output, CENTER_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, RIGHT_REGION, YELLOW, 2);
                 break;
 
             case CENTER:
-                Imgproc.rectangle(input, LEFT_REGION, YELLOW, 2);
-                Imgproc.rectangle(input, CENTER_REGION, GREEN, 2);
-                Imgproc.rectangle(input, RIGHT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, LEFT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, CENTER_REGION, GREEN, 2);
+                Imgproc.rectangle(output, RIGHT_REGION, YELLOW, 2);
                 break;
 
             case RIGHT:
-                Imgproc.rectangle(input, LEFT_REGION, YELLOW, 2);
-                Imgproc.rectangle(input, CENTER_REGION, YELLOW, 2);
-                Imgproc.rectangle(input, RIGHT_REGION, GREEN, 2);
+                Imgproc.rectangle(output, LEFT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, CENTER_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, RIGHT_REGION, GREEN, 2);
                 break;
         }
         else switch (strikePos) {
             case LEFT:
-                Imgproc.rectangle(input, LEFT_ALT_REGION, GREEN, 2);
-                Imgproc.rectangle(input, CENTER_ALT_REGION, YELLOW, 2);
-                Imgproc.rectangle(input, new Rect(2, 2, resolutionWidth - 4, resolutionHeight - 4), YELLOW, 2);
+                Imgproc.rectangle(output, LEFT_ALT_REGION, GREEN, 2);
+                Imgproc.rectangle(output, CENTER_ALT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, new Rect(2, 2, resolutionWidth - 4, resolutionHeight - 4), YELLOW, 2);
                 break;
 
             case CENTER:
-                Imgproc.rectangle(input, LEFT_ALT_REGION, YELLOW, 2);
-                Imgproc.rectangle(input, CENTER_ALT_REGION, GREEN, 2);
-                Imgproc.rectangle(input, new Rect(2, 2, resolutionWidth - 4, resolutionHeight - 4), YELLOW, 2);
+                Imgproc.rectangle(output, LEFT_ALT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, CENTER_ALT_REGION, GREEN, 2);
+                Imgproc.rectangle(output, new Rect(2, 2, resolutionWidth - 4, resolutionHeight - 4), YELLOW, 2);
                 break;
 
             case RIGHT:
-                Imgproc.rectangle(input, LEFT_ALT_REGION, YELLOW, 2);
-                Imgproc.rectangle(input, CENTER_ALT_REGION, YELLOW, 2);
-                Imgproc.rectangle(input, new Rect(2, 2, resolutionWidth - 4, resolutionHeight - 4), GREEN, 2);
+                Imgproc.rectangle(output, LEFT_ALT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, CENTER_ALT_REGION, YELLOW, 2);
+                Imgproc.rectangle(output, new Rect(2, 2, resolutionWidth - 4, resolutionHeight - 4), GREEN, 2);
                 break;
         }
 
-        return input;
+        return output;
     }
 
     public void telemetry(Telemetry telemetry) {
