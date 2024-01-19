@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.rrcamera;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -16,7 +15,7 @@ import org.firstinspires.ftc.teamcode.ftclib.subsystems.RoadRunnerSubsystem;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-public abstract class RRCameraSouthBase extends AutoBase {  // x 4, y -26
+public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
     @Override
     protected Command getCommands() {//new Pose2d(-40, 66, -90)
         Pose2d startPos = getStartPose();
@@ -55,8 +54,7 @@ public abstract class RRCameraSouthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(startPos.getX(),22 * alliance.negation, Math.toRadians(-180)), Math.toRadians(-90 * alliance.negation))
-                .splineToConstantHeading(new Vector2d(60, 18 * alliance.negation), Math.toRadians(0))
+                .splineToSplineHeading(startPos, Math.toRadians(90 * alliance.negation))
                 .build();
         TrajectorySequence traj2C = roadRunner.trajectorySequenceBuilder(traj1C.end())
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -64,8 +62,7 @@ public abstract class RRCameraSouthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(startPos.getX(),22 * alliance.negation, Math.toRadians(-180)), Math.toRadians(-90 * alliance.negation))
-                .splineToConstantHeading(new Vector2d(60, 18 * alliance.negation), Math.toRadians(0))
+                .splineToSplineHeading(startPos, Math.toRadians(90 * alliance.negation))
                 .build();
         TrajectorySequence traj2R = roadRunner.trajectorySequenceBuilder(traj1R.end())
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -73,12 +70,21 @@ public abstract class RRCameraSouthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(startPos.getX(),22 * alliance.negation, Math.toRadians(-180)), Math.toRadians(-90 * alliance.negation))
-                .splineToConstantHeading(new Vector2d(60, 18 * alliance.negation), Math.toRadians(0))
+                .splineToSplineHeading(startPos, Math.toRadians(90 * alliance.negation))
                 .build();
 
 
-        TrajectorySequence traj3 = roadRunner.trajectorySequenceBuilder(traj2L.end())
+        TrajectorySequence traj3 = roadRunner.trajectorySequenceBuilder(startPos)
+                .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
+                        DriveConstants.MAX_VEL / 2,
+                        DriveConstants.MAX_ANG_VEL,
+                        DriveConstants.TRACK_WIDTH
+                ))
+                .splineToSplineHeading(new Pose2d(60, startPos.getY(), Math.toRadians(-180)), Math.toRadians(0))
+                .build();
+
+
+        TrajectorySequence traj4 = roadRunner.trajectorySequenceBuilder(traj2L.end())
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
                         DriveConstants.MAX_VEL / 4,
                         DriveConstants.MAX_ANG_VEL,
@@ -115,10 +121,11 @@ public abstract class RRCameraSouthBase extends AutoBase {  // x 4, y -26
                                 new RRDrive(roadRunner, traj2R)
                         )
                 ),
+                new RRDrive(roadRunner, traj3),
                 new InstantCommand(transfer::deposit),
                 new WaitCommand(4000),
 
-                new RRDrive(roadRunner, traj3),
+                new RRDrive(roadRunner, traj4),
                 new TelemetryCommand(telemetry, "Finished with RR", 100)
         );
     }

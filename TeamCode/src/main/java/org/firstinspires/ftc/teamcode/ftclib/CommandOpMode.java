@@ -33,14 +33,14 @@ public abstract class CommandOpMode extends OpMode {
     }
 
     /**
-     * Schedules {@link com.arcrobotics.ftclib.command.Command} objects to the scheduler
+     * Schedules {@link Command} objects to the scheduler
      */
     public void schedule(Command... commands) {
         CommandScheduler.getInstance().schedule(commands);
     }
 
     /**
-     * Registers {@link com.arcrobotics.ftclib.command.Subsystem} objects to the scheduler
+     * Registers {@link Subsystem} objects to the scheduler
      */
     public void register(Subsystem... subsystems) {
         CommandScheduler.getInstance().registerSubsystem(subsystems);

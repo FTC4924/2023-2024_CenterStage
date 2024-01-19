@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.ftclib.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class HangingSubsystem extends SubsystemBase {

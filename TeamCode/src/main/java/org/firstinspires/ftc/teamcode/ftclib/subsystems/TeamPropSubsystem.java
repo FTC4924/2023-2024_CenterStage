@@ -54,6 +54,8 @@ public class TeamPropSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         cameraPipeline.telemetry(telemetry);
+        telemetry.addData("Strike Pos", getAveragePos());
+        telemetry.addData("Sample Count", sampleCount());
     }
 
     public StrikePos getStrikePos() {
@@ -65,7 +67,7 @@ public class TeamPropSubsystem extends SubsystemBase {
     }
 
     public void samplePos() {
-        samples.add(getStrikePos());
+        if (cameraPipeline.isNewSample()) samples.add(getStrikePos());
     }
 
     public int sampleCount() {

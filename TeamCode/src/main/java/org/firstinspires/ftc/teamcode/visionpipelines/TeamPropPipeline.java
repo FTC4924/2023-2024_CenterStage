@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.visionpipelines;
 
+import androidx.annotation.NonNull;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +11,6 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
-
-import androidx.annotation.NonNull;
 
 public class TeamPropPipeline extends OpenCvPipeline {
     private static final Rect LEFT_REGION = new Rect(101, 424, 206, 110);
@@ -37,6 +37,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
     private int max;
 
     private boolean alt;
+    private volatile boolean newSample;
 
     @NotNull
     private volatile StrikePos strikePos;
@@ -84,6 +85,7 @@ public class TeamPropPipeline extends OpenCvPipeline {
             max = rightMean;
             strikePos = StrikePos.RIGHT;
         }
+        newSample = true;
 
 
         Scalar maskedChannels = new Scalar(
@@ -137,18 +139,18 @@ public class TeamPropPipeline extends OpenCvPipeline {
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("x", LEFT_ALT_REGION.x);
-        telemetry.addData("y", LEFT_ALT_REGION.y);
-        telemetry.addData("w", LEFT_ALT_REGION.width);
-        telemetry.addData("h", LEFT_ALT_REGION.height);
-        telemetry.addData("id", LEFT_ALT_REGION.toString());
-        telemetry.addLine();
-        telemetry.addData("l mean", leftMean);
-        telemetry.addData("c mean", centerMean);
-        telemetry.addData("r mean", rightMean);
-        telemetry.addLine();
-        telemetry.addData("max mean", max);
-        telemetry.addData("color channel", allianceColor.colorChannel);
+//        telemetry.addData("x", LEFT_ALT_REGION.x);
+//        telemetry.addData("y", LEFT_ALT_REGION.y);
+//        telemetry.addData("w", LEFT_ALT_REGION.width);
+//        telemetry.addData("h", LEFT_ALT_REGION.height);
+//        telemetry.addData("id", LEFT_ALT_REGION.toString());
+//        telemetry.addLine();
+//        telemetry.addData("l mean", leftMean);
+//        telemetry.addData("c mean", centerMean);
+//        telemetry.addData("r mean", rightMean);
+//        telemetry.addLine();
+//        telemetry.addData("max mean", max);
+//        telemetry.addData("color channel", allianceColor.colorChannel);
         telemetry.addData("strike pos", strikePos);
         telemetry.addData("alt", alt);
         telemetry.addData("rand", Math.random());
@@ -164,6 +166,11 @@ public class TeamPropPipeline extends OpenCvPipeline {
 
     @NonNull
     public StrikePos getStrikePos() {
+        newSample = false;
         return strikePos;
+    }
+
+    public boolean isNewSample() {
+        return newSample;
     }
 }

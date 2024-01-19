@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands;
 
+import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveGyroCorrectSubsystem;
-import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE;
 
 public class DefaultGyroCorrectDrive extends CommandBase {
     private final DriveGyroCorrectSubsystem drive;

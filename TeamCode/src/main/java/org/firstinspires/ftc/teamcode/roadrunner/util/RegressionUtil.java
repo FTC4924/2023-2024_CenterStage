@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.roadrunner.util;
 
+import androidx.annotation.Nullable;
+
 import com.acmerobotics.roadrunner.kinematics.Kinematics;
 
 import org.apache.commons.math3.stat.regression.SimpleRegression;
@@ -9,8 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.Nullable;
 
 /**
  * Various regression utilities.

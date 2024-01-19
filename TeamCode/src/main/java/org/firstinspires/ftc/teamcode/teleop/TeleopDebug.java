@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
@@ -19,8 +21,6 @@ import org.firstinspires.ftc.teamcode.ftclib.triggers.JoystickTrigger;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 
 import java.util.concurrent.TimeUnit;
-
-import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE;
 
 @TeleOp
 public class TeleopDebug extends CommandOpMode {

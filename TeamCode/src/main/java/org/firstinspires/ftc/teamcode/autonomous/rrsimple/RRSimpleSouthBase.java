@@ -27,7 +27,6 @@ public abstract class RRSimpleSouthBase extends AutoBase {
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-//                .splineToSplineHeading(new Pose2d(30, 30, Math.toRadians(0)), Math.toRadians(0))
                 .splineToSplineHeading(new Pose2d(startPos.getX(),22 * alliance.negation, Math.toRadians(-180)), Math.toRadians(-90 * alliance.negation))
                 .splineToConstantHeading(new Vector2d(60, 18 * alliance.negation), Math.toRadians(0))
                 .build();

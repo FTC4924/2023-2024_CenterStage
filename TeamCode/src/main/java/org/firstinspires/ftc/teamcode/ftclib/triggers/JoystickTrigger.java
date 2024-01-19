@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.ftclib.triggers;
 
-import com.arcrobotics.ftclib.command.button.Trigger;
-
 import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE;
+
+import com.arcrobotics.ftclib.command.button.Trigger;
 
 import java.util.function.DoubleSupplier;
 
