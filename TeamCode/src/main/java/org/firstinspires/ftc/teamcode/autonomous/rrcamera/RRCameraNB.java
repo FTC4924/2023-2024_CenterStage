@@ -10,7 +10,7 @@ public class RRCameraNB extends RRCameraNorthBase {
     @Override
     protected Pose2d getStartPose() {
         return new Pose2d(18, 66, Math.toRadians(-90));
-    }
+    }  // TODO: 1/19/2024 Start positions should be constant and referenced here, not instantiated here.
 
     @Override
     protected AllianceColor getAlliance() {
