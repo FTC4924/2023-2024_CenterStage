@@ -5,12 +5,16 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.PixelPlacerSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.RoadRunnerSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
 
 public abstract class AutoBase extends CommandOpMode {
     protected RoadRunnerSubsystem roadRunner;
     protected TeamPropSubsystem teamProp;
+    protected PixelPlacerSubsystem pixelPlacer;
+
+
 
     @Override
     public void initialize() {
@@ -24,6 +28,8 @@ public abstract class AutoBase extends CommandOpMode {
 
         register(roadRunner);
         telemetry.update();
+
+        pixelPlacer = new PixelPlacerSubsystem(hardwareMap,"pixelPlacer");
     }
 
     @Override

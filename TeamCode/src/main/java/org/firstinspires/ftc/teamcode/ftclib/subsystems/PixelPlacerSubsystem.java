@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class PixelPlacerSubsystem {
 
     public enum PlacerState {
-        UP(0.0), DOWN(0.4);
+        UP(0.0), DOWN(0.45);
 
         final double pos;
         PlacerState(double pos) {
