@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.autonomous.AutoBase;
 import org.firstinspires.ftc.teamcode.ftclib.commands.RRDrive;
 import org.firstinspires.ftc.teamcode.ftclib.commands.StrikeAction;
@@ -14,13 +15,14 @@ import org.firstinspires.ftc.teamcode.ftclib.commands.TelemetryCommand;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.RoadRunnerSubsystem;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.visionpipelines.StrikePos;
 
 public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
     @Override
     protected Command getCommands() {//new Pose2d(-40, 66, -90)
         Pose2d startPos = getStartPose();
         setRoadRunnerStart(startPos);
-        teamProp.useAlt(alliance.negation != 1);
+        teamProp.useAlt(alliance == AllianceColor.BLUE );
 
         TrajectorySequence traj1L = roadRunner.trajectorySequenceBuilder(startPos)
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -28,7 +30,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(startPos.getX() + 4,40 * alliance.negation, Math.toRadians(180)), Math.toRadians(-90 * alliance.negation))
+                .splineToSplineHeading(new Pose2d(startPos.getX() - 4,38 * alliance.negation, Math.toRadians(90 + 90 * alliance.negation)), Math.toRadians(-90 * alliance.negation))
                 .build();
         TrajectorySequence traj1C = roadRunner.trajectorySequenceBuilder(startPos)
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -36,7 +38,13 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(startPos.getX() + 4,40 * alliance.negation, Math.toRadians(90 * alliance.negation)), Math.toRadians(-90 * alliance.negation))
+                .splineToSplineHeading(new Pose2d(startPos.getX() - 4,35 * alliance.negation, Math.toRadians(90 * alliance.negation)), Math.toRadians(-90 * alliance.negation))
+                .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
+                        DriveConstants.MAX_VEL / 4,
+                        DriveConstants.MAX_ANG_VEL,
+                        DriveConstants.TRACK_WIDTH
+                ))
+                .splineToSplineHeading(new Pose2d(startPos.getX() - 4,42 * alliance.negation, Math.toRadians(90 * alliance.negation)), Math.toRadians(90 * alliance.negation))
                 .build();
         TrajectorySequence traj1R = roadRunner.trajectorySequenceBuilder(startPos)
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -44,11 +52,11 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(startPos.getX() + 4,40 * alliance.negation, Math.toRadians(0)), Math.toRadians(-90 * alliance.negation))
+                .splineToSplineHeading(new Pose2d(startPos.getX() - 5,38 * alliance.negation, Math.toRadians(90 - 90 * alliance.negation)), Math.toRadians(-90 * alliance.negation))
                 .build();
 
 
-        TrajectorySequence traj2L = roadRunner.trajectorySequenceBuilder(traj1L.end())
+        TrajectorySequence traj2L = roadRunner.trajectorySequenceBuilder(traj1L.end(), Math.toRadians(90 * alliance.negation))
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
                         DriveConstants.MAX_VEL / 2,
                         DriveConstants.MAX_ANG_VEL,
@@ -56,7 +64,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                 ))
                 .splineToSplineHeading(startPos, Math.toRadians(90 * alliance.negation))
                 .build();
-        TrajectorySequence traj2C = roadRunner.trajectorySequenceBuilder(traj1C.end())
+        TrajectorySequence traj2C = roadRunner.trajectorySequenceBuilder(traj1C.end(), Math.toRadians(90 * alliance.negation))
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
                         DriveConstants.MAX_VEL / 2,
                         DriveConstants.MAX_ANG_VEL,
@@ -64,7 +72,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                 ))
                 .splineToSplineHeading(startPos, Math.toRadians(90 * alliance.negation))
                 .build();
-        TrajectorySequence traj2R = roadRunner.trajectorySequenceBuilder(traj1R.end())
+        TrajectorySequence traj2R = roadRunner.trajectorySequenceBuilder(traj1R.end(), Math.toRadians(90 * alliance.negation))
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
                         DriveConstants.MAX_VEL / 2,
                         DriveConstants.MAX_ANG_VEL,
@@ -84,7 +92,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                 .build();
 
 
-        TrajectorySequence traj4 = roadRunner.trajectorySequenceBuilder(traj2L.end())
+        TrajectorySequence traj4 = roadRunner.trajectorySequenceBuilder(traj3.end())
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
                         DriveConstants.MAX_VEL / 4,
                         DriveConstants.MAX_ANG_VEL,

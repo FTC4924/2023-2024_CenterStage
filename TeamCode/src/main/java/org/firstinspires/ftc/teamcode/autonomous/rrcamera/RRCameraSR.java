@@ -16,4 +16,5 @@ public class RRCameraSR extends RRCameraSouthBase {
     protected AllianceColor getAlliance() {
         return AllianceColor.RED;
     }
+
 }

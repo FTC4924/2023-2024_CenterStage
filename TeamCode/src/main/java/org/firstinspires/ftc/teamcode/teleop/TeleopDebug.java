@@ -7,6 +7,8 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.util.Timing.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -14,6 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.PixelPlacerSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.RoadRunnerSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.triggers.AxisTrigger;
@@ -29,11 +32,16 @@ public class TeleopDebug extends CommandOpMode {
     private GamepadEx gpad1;
     private GamepadEx gpad2;
 
+    private PixelPlacerSubsystem pixelPlacer;
+
     //private AprilTagSubsystem aprilTag;
     private TeamPropSubsystem teamProp;
 
     @Override
     public void initialize() {
+
+        pixelPlacer = new PixelPlacerSubsystem(hardwareMap, "pixelPlacer");
+
         // TODO: 6/27/2023 Construct subsystems here
 
         //aprilTag = new AprilTagSubsystem(hardwareMap, telemetry);
@@ -44,23 +52,23 @@ public class TeleopDebug extends CommandOpMode {
 
         Pose2d startPos = new Pose2d(18, 66, -90);
         timer.start();
-        TrajectorySequenceBuilder trajectorySequenceBuilder = roadRunner.trajectorySequenceBuilder(startPos)
-                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
-                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
-                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
-                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
-                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
-                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
-                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
-                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
-                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
-                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
-                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
-                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
-                .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
-                .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0);
+        //TrajectorySequenceBuilder trajectorySequenceBuilder = roadRunner.trajectorySequenceBuilder(startPos)
+        //        .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+        //        .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+        //        .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+        //        .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+        //        .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+        //        .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+        //        .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+        //        .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+        //        .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+        //        .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+        //        .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+        //        .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0)
+        //        .splineToSplineHeading(new Pose2d(startPos.getX(),startPos.getY()/2 * alliance.negation, -180), -90 * alliance.negation)
+        //        .splineToConstantHeading(new Vector2d(60, 12 * alliance.negation), 0);
         telemetry.addData("Trajectory Construction", timer.elapsedTime() / 1000000.0);
-        trajectorySequenceBuilder.build();
+        //trajectorySequenceBuilder.build();
         telemetry.addData("Trajectory Build Time", timer.elapsedTime() / 1000000.0);
 
 
@@ -92,6 +100,9 @@ public class TeleopDebug extends CommandOpMode {
         ///////////////////////////// Gamepad 1 keybindings /////////////////////////////
         gpad1.getGamepadButton(GamepadKeys.Button.B)  // Reset the Gyro
                 .whenActive(drive::resetGyro);
+
+        gpad1.getGamepadButton(GamepadKeys.Button.X)
+                .toggleWhenActive(pixelPlacer::placerUp, pixelPlacer::placerDown);
 
         // TODO: 6/27/2023 Add keybindings for driver 1
 
