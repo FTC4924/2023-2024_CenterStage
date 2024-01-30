@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
 import org.firstinspires.ftc.teamcode.ftclib.CommandOpMode;
 import org.firstinspires.ftc.teamcode.ftclib.commands.defaultcommands.DefaultDrive;
@@ -19,6 +20,8 @@ public abstract class TeleopBase extends CommandOpMode {
 
     private ServoEx airplaneServo;
 
+    private RevBlinkinLedDriver ledLights;
+
     @Override
     public void initialize() {
 
@@ -27,6 +30,8 @@ public abstract class TeleopBase extends CommandOpMode {
         airplaneServo.setInverted(true);
 
         drive.setAngleOffset(driveOffset);
+
+        ledLights = hardwareMap.get(RevBlinkinLedDriver.class, "ledLights");
 
         // Initialize the gamepads and gamepad event triggers
         gpad1 = new GamepadEx(gamepad1);
@@ -55,12 +60,19 @@ public abstract class TeleopBase extends CommandOpMode {
                 .whenPressed(() -> drive.setTurnTurbo(true))
                 .whenReleased(() -> drive.setTurnTurbo(false));
         gpad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).and(gpad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))
-                        .whenActive(() -> airplaneServo.setPosition(1))
-                        .whenInactive(() -> airplaneServo.setPosition(0));
+                .whenActive(() -> airplaneServo.setPosition(1))
+                .whenInactive(() -> airplaneServo.setPosition(0));
         gpad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(hanging::hooksDown);
+                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE));
+        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET));
+        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN));
         gpad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(hanging::hooksUp);
+                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE));
+        gpad1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE));
+
 
 
         // TODO: 6/27/2023 Add keybindings for driver 1
