@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.AllianceColor;
 public class RRCameraNR extends RRCameraNorthBase {
     @Override
     protected Pose2d getStartPose() {
-        return new Pose2d(18, -62, Math.toRadians(90));
+        return new Pose2d(16.5, -62, Math.toRadians(90));
     }
 
     @Override

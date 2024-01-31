@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.rrcamera;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -64,7 +65,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(24,60 * alliance.negation, Math.toRadians(-90)), Math.toRadians(0 * alliance.negation))
+                .splineToSplineHeading(new Pose2d(22.5,60 * alliance.negation, Math.toRadians(-90)), Math.toRadians(0 * alliance.negation))
                 .build();
         TrajectorySequence traj2C = roadRunner.trajectorySequenceBuilder(traj1C.end(), Math.toRadians(90 * alliance.negation))
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -72,7 +73,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(24, 60 * alliance.negation, Math.toRadians(90 * alliance.negation)), Math.toRadians(0.0 * alliance.negation))
+                .splineToSplineHeading(new Pose2d(22.5, 60 * alliance.negation, Math.toRadians(90 * alliance.negation)), Math.toRadians(0.0 * alliance.negation))
                 .build();
         TrajectorySequence traj2R = roadRunner.trajectorySequenceBuilder(traj1R.end(), Math.toRadians(90 * alliance.negation))
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -80,7 +81,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(24, 60 * alliance.negation, Math.toRadians(90)), Math.toRadians(0 * alliance.negation))
+                .splineToSplineHeading(new Pose2d(22.5, 60 * alliance.negation, Math.toRadians(90)), Math.toRadians(0 * alliance.negation))
                 .build();
 
         TrajectorySequence traj3L = roadRunner.trajectorySequenceBuilder(traj2L.end(), Math.toRadians(0))
@@ -89,7 +90,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(54.5, 35.5 * alliance.negation + 5.5 + 6, Math.toRadians(0)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(53.5, 36.5 * alliance.negation + 5.5 + 6, Math.toRadians(0)), Math.toRadians(0))  // robotCenterAlign * negation + placerOffset + scorePosOffset
                 .build();
         TrajectorySequence traj3C = roadRunner.trajectorySequenceBuilder(traj2C.end(), Math.toRadians(0))
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -97,7 +98,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(54.5, 35.5 * alliance.negation + 5.5, Math.toRadians(0)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(53.5, 36.5 * alliance.negation + 5.5, Math.toRadians(0)), Math.toRadians(0))
                 .build();
         TrajectorySequence traj3R = roadRunner.trajectorySequenceBuilder(traj2R.end(), Math.toRadians(0))
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
@@ -105,7 +106,33 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(54.5, 35.5 * alliance.negation + 5.5 -  6, Math.toRadians(0)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(53.5, 36.5 * alliance.negation + 5.5 - 6, Math.toRadians(0)), Math.toRadians(0))
+                .build();
+
+
+        TrajectorySequence traj4L = roadRunner.trajectorySequenceBuilder(traj3L.end(), Math.toRadians(180))
+                .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
+                        DriveConstants.MAX_VEL / 2,
+                        DriveConstants.MAX_ANG_VEL,
+                        DriveConstants.TRACK_WIDTH
+                ))
+                .splineToConstantHeading(new Vector2d(58.5, startPos.getY()), Math.toRadians(0))
+                .build();
+        TrajectorySequence traj4C = roadRunner.trajectorySequenceBuilder(traj3C.end(), Math.toRadians(180))
+                .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
+                        DriveConstants.MAX_VEL / 2,
+                        DriveConstants.MAX_ANG_VEL,
+                        DriveConstants.TRACK_WIDTH
+                ))
+                .splineToConstantHeading(new Vector2d(58.5, startPos.getY()), Math.toRadians(0))
+                .build();
+        TrajectorySequence traj4R = roadRunner.trajectorySequenceBuilder(traj3R.end(), Math.toRadians(180))
+                .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
+                        DriveConstants.MAX_VEL / 2,
+                        DriveConstants.MAX_ANG_VEL,
+                        DriveConstants.TRACK_WIDTH
+                ))
+                .splineToConstantHeading(new Vector2d(58.5, startPos.getY()), Math.toRadians(0))
                 .build();
 
 
@@ -123,7 +150,8 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                                 new WaitCommand(500),
                                 new InstantCommand(() -> pixelPlacer.placerDown()),
                                 new WaitCommand(1500),
-                                new InstantCommand(()-> pixelPlacer.placerUp())
+                                new InstantCommand(()-> pixelPlacer.placerUp()),
+                                new RRDrive(roadRunner, traj4L)
 
                         ),
                         new SequentialCommandGroup(
@@ -137,7 +165,8 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                                 new WaitCommand(500),
                                 new InstantCommand(() -> pixelPlacer.placerDown()),
                                 new WaitCommand(1500),
-                                new InstantCommand(()-> pixelPlacer.placerUp())
+                                new InstantCommand(()-> pixelPlacer.placerUp()),
+                                new RRDrive(roadRunner, traj4C)
                         ),
                         new SequentialCommandGroup(
                                 new RRDrive(roadRunner, traj1R),
@@ -150,7 +179,8 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                                 new WaitCommand(500),
                                 new InstantCommand(() -> pixelPlacer.placerDown()),
                                 new WaitCommand(1500),
-                                new InstantCommand(()-> pixelPlacer.placerUp())
+                                new InstantCommand(()-> pixelPlacer.placerUp()),
+                                new RRDrive(roadRunner, traj4R)
                         )
                 ),
 
