@@ -90,7 +90,7 @@ public abstract class RRCameraNorthBase extends AutoBase {  // x 4, y -26
                         DriveConstants.MAX_ANG_VEL,
                         DriveConstants.TRACK_WIDTH
                 ))
-                .splineToSplineHeading(new Pose2d(53.5, 36.5 * alliance.negation + 5.5 + 6, Math.toRadians(0)), Math.toRadians(0))  // robotCenterAlign * negation + placerOffset + scorePosOffset
+                .splineToSplineHeading(new Pose2d(53.5, 36.5 * alliance.negation + 5.5 + 7.5, Math.toRadians(0)), Math.toRadians(0))  // robotCenterAlign * negation + placerOffset + scorePosOffset
                 .build();
         TrajectorySequence traj3C = roadRunner.trajectorySequenceBuilder(traj2C.end(), Math.toRadians(0))
                 .setVelConstraint(RoadRunnerSubsystem.getVelocityConstraint(
