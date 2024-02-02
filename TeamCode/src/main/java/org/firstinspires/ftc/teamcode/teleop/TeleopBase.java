@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static org.firstinspires.ftc.teamcode.RobotConstants.CONTROLLER_TOLERANCE;
 
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -29,7 +32,7 @@ public abstract class TeleopBase extends CommandOpMode {
         airplaneServo = new SimpleServo(hardwareMap, "airplaneServo", 0, 0);
         airplaneServo.setInverted(true);
 
-        drive.setAngleOffset(driveOffset);
+        drive.loadAngleOffset();
 
         ledLights = hardwareMap.get(RevBlinkinLedDriver.class, "ledLights");
 
@@ -62,16 +65,28 @@ public abstract class TeleopBase extends CommandOpMode {
         gpad1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).and(gpad1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))
                 .whenActive(() -> airplaneServo.setPosition(1))
                 .whenInactive(() -> airplaneServo.setPosition(0));
-        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE));
-        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET));
-        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN));
+//        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+//                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE));
+//        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+//                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET));
+//        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+//                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN));
+//        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+//                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE));
+//        gpad1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+//                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE));
         gpad1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE));
-        gpad1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .whenPressed(() -> ledLights.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE));
+                .whenPressed(new SequentialCommandGroup(
+                        new InstantCommand(() -> hanging.setRawRightHook(0.2)),
+                        new WaitCommand(500),
+                        new InstantCommand(() -> pixelPlacer.placerDown())
+                ));
+        gpad1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(new SequentialCommandGroup(
+                        new InstantCommand(() -> pixelPlacer.placerUp()),
+                        new WaitCommand(500),
+                        new InstantCommand(() -> hanging.hooksDown())
+                ));
 
 
 

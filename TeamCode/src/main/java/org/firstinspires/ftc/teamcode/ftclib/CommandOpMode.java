@@ -12,16 +12,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.HangingSubsystem;
+import org.firstinspires.ftc.teamcode.ftclib.subsystems.PixelPlacerSubsystem;
 import org.firstinspires.ftc.teamcode.ftclib.subsystems.TransferSubsystem;
 
 public abstract class CommandOpMode extends OpMode {
     public Telemetry telemetry = new MultipleTelemetry(super.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-    protected static double driveOffset;
-
     protected DriveSubsystem drive;
     protected HangingSubsystem hanging;
     protected TransferSubsystem transfer;
+    protected PixelPlacerSubsystem pixelPlacer;
 
     @SuppressWarnings("FieldCanBeLocal")
     protected AllianceColor alliance;
@@ -73,10 +73,11 @@ public abstract class CommandOpMode extends OpMode {
                 "transferBack"
         );
 
-        register(drive, hanging, transfer);
+        pixelPlacer = new PixelPlacerSubsystem(hardwareMap,"pixelPlacer");
+
+        register(drive, hanging, transfer, pixelPlacer);
 
         initialize();
-        driveOffset = 0;
     }
 
     @Override

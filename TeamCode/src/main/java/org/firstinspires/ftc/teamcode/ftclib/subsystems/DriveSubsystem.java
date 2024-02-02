@@ -16,6 +16,8 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
 
     private static final double ANGLE_CORRECTION = 0.5;
 
+    protected static double savedAngleOffset;
+
     private final MotorEx frontLeft, frontRight, backLeft, backRight;
 
     private final MecanumDrive mecanumDrive;
@@ -83,8 +85,29 @@ public class DriveSubsystem extends SubsystemBase { // TODO: 12/13/2022 Rewrite 
         angleOffset = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 
-    public void setAngleOffset(double offset) {
-        angleOffset = offset;
+    public void setSavedAngleOffset(double offset) {
+        savedAngleOffset = offset;
+    }
+
+    public double getSavedAngleOffset() {
+        return savedAngleOffset;
+    }
+
+    public void clearAngleOffset() {
+        savedAngleOffset = 0;
+    }
+
+    public void saveAngleOffset() {
+        savedAngleOffset = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) + 180;
+    }
+
+    public void loadAngleOffset() {
+        angleOffset = savedAngleOffset;
+        clearAngleOffset();
+    }
+
+    public void setAngleOffset(double angleOffset) {
+        this.angleOffset = angleOffset;
     }
 
     public void stop() { mecanumDrive.stop(); }

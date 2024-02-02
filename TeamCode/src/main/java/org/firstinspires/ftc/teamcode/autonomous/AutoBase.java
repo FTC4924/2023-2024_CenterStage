@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.ftclib.subsystems.TeamPropSubsystem;
 public abstract class AutoBase extends CommandOpMode {
     protected RoadRunnerSubsystem roadRunner;
     protected TeamPropSubsystem teamProp;
-    protected PixelPlacerSubsystem pixelPlacer;
 
 
 
@@ -27,9 +26,6 @@ public abstract class AutoBase extends CommandOpMode {
         schedule(new InstantCommand().andThen(getCommands()));  // Schedules commmands with the command scheduler.
 
         register(roadRunner);
-        telemetry.update();
-
-        pixelPlacer = new PixelPlacerSubsystem(hardwareMap,"pixelPlacer");
     }
 
     @Override
@@ -39,7 +35,7 @@ public abstract class AutoBase extends CommandOpMode {
 
     @Override
     public void stopped() {
-        driveOffset = Math.toDegrees(roadRunner.getExternalHeading());
+        drive.saveAngleOffset();
     }
 
     public void setRoadRunnerStart(Pose2d pose2d) {
